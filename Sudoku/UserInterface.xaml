@@ -1,0 +1,264 @@
+<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+	x:Class="SuperSudoku.UserInterface"
+	x:Name="Window"
+	Title="Super Sudoku for Windows "
+	Width="374" Height="505" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+
+	<Window.Resources>
+        <SolidColorBrush x:Key="TextColor" Color="#FF171717"/>
+        <SolidColorBrush x:Key="SelectedBorderColor" Color="#FF9DBFFF"/>
+        
+		<SolidColorBrush x:Key="BaseBorder-Sketch" Color="#FF606060"/>
+
+		<SolidColorBrush x:Key="BaseBackground-Sketch" Color="#FFFFFFFF"/>
+		<SolidColorBrush x:Key="DisabledBackground-Sketch" Color="#FFE3E8EE"/>
+		<FontFamily x:Key="FontFamily-Sketch">/SuperSudokuMockup.Screens;component/Fonts/#Buxton Sketch</FontFamily>
+		<FontWeight x:Key="FontWeight-Sketch">Normal</FontWeight>
+
+		<System:Double x:Key="SizeDouble-Sketch">19</System:Double>
+		<SolidColorBrush x:Key="DisabledForeground-Sketch" Color="#FF9F9F9F"/>
+	<!-- Basic Sketch Textbox -->
+		<Style x:Key="BasicTextBox-Sketch" TargetType="{x:Type TextBox}">
+			<Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+			<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+			<Setter Property="AllowDrop" Value="true"/>
+			<Setter Property="Foreground" Value="{StaticResource BaseBorder-Sketch}"/>
+			<Setter Property="BorderBrush" Value="{StaticResource BaseBorder-Sketch}"/>
+			<Setter Property="Background" Value="{StaticResource BaseBackground-Sketch}"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type TextBox}">
+						<Grid>
+						<!-- The implementation places the Content into the ScrollViewer. It must be named PART_ContentHost for the control to function -->
+							<ScrollViewer Style="{DynamicResource ScrollViewer-Sketch2}" x:Name="PART_ContentHost" Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}" BorderBrush="{TemplateBinding BorderBrush}" FontFamily="./#Segoe Print" d:IsStaticText="False"/>
+						</Grid>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsFocused" Value="True">
+								<Setter Property="Background" TargetName="PART_ContentHost" Value="#FFBBBBBB"/>
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="False">
+								<Setter Property="Background" TargetName="PART_ContentHost" Value="{DynamicResource DisabledBackground-Sketch}"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="FontFamily" Value="{DynamicResource FontFamily-Sketch}"/>
+			<Setter Property="FontWeight" Value="{DynamicResource FontWeight-Sketch}"/>
+			<Setter Property="FontSize" Value="{DynamicResource SizeDouble-Sketch}"/>
+			<Style.Triggers>
+				<Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource DisabledBackground-Sketch}"/>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+
+    <!-- Grid Element Styles -->
+        <Style x:Key="GridElement" TargetType="{x:Type TextBox}">
+            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Setter Property="Background" Value="{StaticResource BaseBackground-Sketch}"/>
+            <Setter Property="FontFamily" Value="{DynamicResource FontFamily-Sketch}"/>
+            <Setter Property="FontWeight" Value="{DynamicResource FontWeight-Sketch}"/>
+            <Setter Property="FontSize" Value="{DynamicResource SizeDouble-Sketch}"/>
+            
+            <Setter Property="FontSize" Value="26.667"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="FontFamily" Value="Arial Black"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+
+            <Setter Property="IsTabStop" Value="True"/>
+            
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="{DynamicResource DisabledForeground-Sketch}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="GridElementFocused" TargetType="{x:Type TextBox}" BasedOn="{StaticResource GridElement}">
+            <Setter Property="BorderBrush" Value="{StaticResource SelectedBorderColor}"/>
+            
+        </Style>
+        <Style x:Key="GridElementDisabled" TargetType="{x:Type TextBox}" BasedOn="{StaticResource GridElement}">
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Background" Value="{StaticResource DisabledBackground-Sketch}"/>
+            <Setter Property="Focusable" Value="False"/>
+        </Style>
+    </Window.Resources>
+
+	<Grid x:Name="LayoutRoot">
+		<Menu Height="24" VerticalAlignment="Top">
+			<MenuItem x:Name="FileMenu" Header="File">
+				<MenuItem x:Name="NewGame" Header="New" Click="NewGameClick"/>
+                <MenuItem x:Name="LoadGame" Header="Load"  Click="LoadGameClick"/>
+				<MenuItem x:Name="SaveGame" Header="Save" Click="SaveGameClick" />
+				<MenuItem x:Name="SaveGameUnsolved" Header="Save Unsolved" Click="SaveGameUnsolvedClick" />
+				<MenuItem x:Name="EnterPuzzle" Header="Enter Puzzle" Click="EnterPuzzleClick" />
+				<Separator/>
+				<MenuItem x:Name="Exit" Header="Exit" DataContext="{Binding}" Click="ExitClick" />
+			</MenuItem>
+			<MenuItem x:Name="OptionsMenu" Header="Options">
+				<MenuItem x:Name="AlwaysShowHints" Header="Always Show Hints" IsCheckable="True" Checked="AlwaysShowHintsChecked" Unchecked="AlwaysShowHintsUnchecked" />
+				<MenuItem x:Name="ShowErrors" Header="Show Errors" IsCheckable="True" Checked="ShowErrorsChecked" Unchecked="ShowErrorsUnchecked" />
+			</MenuItem>
+			<MenuItem x:Name="HelpMenu" Header="Help">
+				<MenuItem x:Name="GameRules" Header="Game Rules"/>
+				<MenuItem x:Name="About" Header="Help"/>
+			</MenuItem>
+		</Menu>
+		<Rectangle Margin="0,21,0,0" Stroke="Black" HorizontalAlignment="Left" Width="368" Height="368" VerticalAlignment="Top">
+			<Rectangle.Fill>
+				<RadialGradientBrush>
+					<GradientStop Color="Black"/>
+					<GradientStop Color="#FF56585A" Offset="1"/>
+				</RadialGradientBrush>
+			</Rectangle.Fill>
+		</Rectangle>
+        <Grid>
+            <UniformGrid x:Name="Grid1" Margin="0,21,0,0" Height="120" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" Rows="3" Columns="3">
+                <TextBox x:Name="_1x1" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="0" Loaded="GameWindowLoaded" />
+                <TextBox x:Name="_1x2" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="1" />
+                <TextBox x:Name="_1x3" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="2" />
+                <TextBox x:Name="_2x1" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="3" />
+                <TextBox x:Name="_2x2" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="4" />
+                <TextBox x:Name="_2x3" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="5" />
+                <TextBox x:Name="_3x1" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="6" />
+                <TextBox x:Name="_3x2" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="7" />
+                <TextBox x:Name="_3x3" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="8" />
+            </UniformGrid>
+            <UniformGrid Margin="124,21,0,0" Height="120" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120">
+                <TextBox x:Name="_1x4" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="9" />
+                <TextBox x:Name="_1x5" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="10" />
+                <TextBox x:Name="_1x6" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="11" />
+                <TextBox x:Name="_2x4" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="12" />
+                <TextBox x:Name="_2x5" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="13" />
+                <TextBox x:Name="_2x6" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="14" />
+                <TextBox x:Name="_3x4" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="15" />
+                <TextBox x:Name="_3x5" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="16" />
+                <TextBox x:Name="_3x6" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="17" />
+            </UniformGrid>
+            <UniformGrid Margin="248,21,0,0" HorizontalAlignment="Left" Height="120" VerticalAlignment="Top" Width="120">
+                <TextBox x:Name="_1x7" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="18" />
+                <TextBox x:Name="_1x8" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="19" />
+                <TextBox x:Name="_1x9" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="20" />
+                <TextBox x:Name="_2x7" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="21" />
+                <TextBox x:Name="_2x8" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="22" />
+                <TextBox x:Name="_2x9" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="23" />
+                <TextBox x:Name="_3x7" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="24" />
+                <TextBox x:Name="_3x8" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="25" />
+                <TextBox x:Name="_3x9" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="26" />
+            </UniformGrid>
+            <UniformGrid Margin="0,145,0,0" HorizontalAlignment="Left" Width="120" Height="120" VerticalAlignment="Top">
+                <TextBox x:Name="_4x1" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="27" />
+                <TextBox x:Name="_4x2" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="28" />
+                <TextBox x:Name="_4x3" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="29" />
+                <TextBox x:Name="_5x1" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="30" />
+                <TextBox x:Name="_5x2" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="31" />
+                <TextBox x:Name="_5x3" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="32" />
+                <TextBox x:Name="_6x1" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="33" />
+                <TextBox x:Name="_6x2" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="34" />
+                <TextBox x:Name="_6x3" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="35" />
+            </UniformGrid>
+            <UniformGrid Margin="124,145,0,0" HorizontalAlignment="Left" Width="120" Height="120" VerticalAlignment="Top">
+                <TextBox x:Name="_4x4" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="36" />
+                <TextBox x:Name="_4x5" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="37" />
+                <TextBox x:Name="_4x6" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="38" />
+                <TextBox x:Name="_5x4" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="39" />
+                <TextBox x:Name="_5x5" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="40" />
+                <TextBox x:Name="_5x6" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="41" />
+                <TextBox x:Name="_6x4" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="42" />
+                <TextBox x:Name="_6x5" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="43" />
+                <TextBox x:Name="_6x6" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="44" />
+            </UniformGrid>
+            <UniformGrid Margin="248,145,0,0" HorizontalAlignment="Left" Width="120" Height="120" VerticalAlignment="Top">
+                <TextBox x:Name="_4x7" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="45" />
+                <TextBox x:Name="_4x8" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="46" />
+                <TextBox x:Name="_4x9" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="47" />
+                <TextBox x:Name="_5x7" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="48" />
+                <TextBox x:Name="_5x8" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="49" />
+                <TextBox x:Name="_5x9" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="50" />
+                <TextBox x:Name="_6x7" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="51" />
+                <TextBox x:Name="_6x8" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="52" />
+                <TextBox x:Name="_6x9" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="53" />
+            </UniformGrid>
+            <UniformGrid Margin="0,269,0,0" Height="120" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120">
+                <TextBox x:Name="_7x1" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="54" />
+                <TextBox x:Name="_7x2" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="55" />
+                <TextBox x:Name="_7x3" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="56" />
+                <TextBox x:Name="_8x1" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="57" />
+                <TextBox x:Name="_8x2" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="58" />
+                <TextBox x:Name="_8x3" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="59" />
+                <TextBox x:Name="_9x1" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="60" />
+                <TextBox x:Name="_9x2" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="61" />
+                <TextBox x:Name="_9x3" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="62" />
+            </UniformGrid>
+            <UniformGrid Margin="124,269,0,0" Height="120" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120">
+                <TextBox x:Name="_7x4" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="63" />
+                <TextBox x:Name="_7x5" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="64" />
+                <TextBox x:Name="_7x6" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="65" />
+                <TextBox x:Name="_8x4" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="66" />
+                <TextBox x:Name="_8x5" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="67" />
+                <TextBox x:Name="_8x6" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="68" />
+                <TextBox x:Name="_9x4" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="69" />
+                <TextBox x:Name="_9x5" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="70" />
+                <TextBox x:Name="_9x6" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="71" />
+            </UniformGrid>
+            <UniformGrid Margin="248,269,0,0" HorizontalAlignment="Left" Height="120" VerticalAlignment="Top" Width="120">
+                <TextBox x:Name="_7x7" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="72" />
+                <TextBox x:Name="_7x8" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="73" />
+                <TextBox x:Name="_7x9" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="74" />
+                <TextBox x:Name="_8x7" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="75" />
+                <TextBox x:Name="_8x8" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="76" />
+                <TextBox x:Name="_8x9" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="77" />
+                <TextBox x:Name="_9x7" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="78" />
+                <TextBox x:Name="_9x8" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="79" />
+                <TextBox x:Name="_9x9" Style="{StaticResource GridElement}" GotFocus="GridElementGotFocus" LostFocus="GridElementLostFocus" KeyDown="GridElementKeyDown" PreviewKeyDown="GridElementPreviewKeyDown" TabIndex="80" />
+            </UniformGrid>
+
+            <Grid.ContextMenu>
+                <ContextMenu Name="GridMenu">
+                    <MenuItem Name="ShowHint" Header="Show Hint" Click="ShowHintClick" />
+                    <MenuItem Name="FillInAnswer" Header="Fill In Answer" Click="FillInAnswerClick"/>
+                </ContextMenu>
+            </Grid.ContextMenu>
+        </Grid>
+		
+        <Menu VerticalAlignment="Bottom" d:LayoutOverrides="Width" Margin="0,0,0,-0.04" RenderTransformOrigin="0.5,0.5" IsEnabled="False">
+			<Menu.Background>
+				<LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+					<GradientStop Color="White" Offset="0.918"/>
+					<GradientStop Color="#FF818181" Offset="1"/>
+					<GradientStop Color="#FFDCD9D9" Offset="0.823"/>
+				</LinearGradientBrush>
+			</Menu.Background>
+			<Menu.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform ScaleY="-1"/>
+					<SkewTransform/>
+					<RotateTransform/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</Menu.RenderTransform>
+			<TextBlock TextWrapping="Wrap" RenderTransformOrigin="2.021,0" Width="350.987" IsEnabled="False" Foreground="#FF252525">
+				<TextBlock.RenderTransform>
+					<TransformGroup>
+						<ScaleTransform ScaleY="-1"/>
+						<SkewTransform/>
+						<RotateTransform/>
+						<TranslateTransform Y="17.04"/>
+					</TransformGroup>
+				</TextBlock.RenderTransform>
+			</TextBlock>
+		</Menu>
+		<TextBlock x:Name="HintsBox" Margin="8,0,95.873,25.76" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="32.96"/>
+		<TextBlock x:Name="HintsBoxTitle" HorizontalAlignment="Left" Margin="8,0,0,62.72" TextWrapping="Wrap" VerticalAlignment="Bottom" FontWeight="Bold" FontSize="16" Text="Hint"/>
+		<Button Content="Solve Now" HorizontalAlignment="Right" Margin="0,0,8,25.76" VerticalAlignment="Bottom" Width="75" IsEnabled="True" Name="SolveNow" Click="SolveNowClick" />
+        <Button Content="Entry Complete" Visibility="Hidden" HorizontalAlignment="Right" Margin="0,0,8,25.76" VerticalAlignment="Bottom" Width="105" IsEnabled="True" Name="EntryComplete" Click="EntryCompleteClick" />
+    </Grid>
+</Window>
