@@ -1,0 +1,7 @@
+C:\GitHub\Games\BridgeDealing\BridgeDealing\bin\Debug\BridgeDealing.exe.config
+C:\GitHub\Games\BridgeDealing\BridgeDealing\bin\Debug\BridgeDealing.exe
+C:\GitHub\Games\BridgeDealing\BridgeDealing\bin\Debug\BridgeDealing.pdb
+C:\GitHub\Games\BridgeDealing\BridgeDealing\obj\Debug\BridgeDealing.csprojAssemblyReference.cache
+C:\GitHub\Games\BridgeDealing\BridgeDealing\obj\Debug\BridgeDealing.csproj.CoreCompileInputs.cache
+C:\GitHub\Games\BridgeDealing\BridgeDealing\obj\Debug\BridgeDealing.exe
+C:\GitHub\Games\BridgeDealing\BridgeDealing\obj\Debug\BridgeDealing.pdb

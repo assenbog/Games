@@ -11,19 +11,38 @@
         {
             const int MaxDealCount = 32;
 
+            var sortOrders = SortOrders.Suit;
+            var allow4OfAKind = true;
+            var maxSequenceLength = 0;
+
             var dealCount = 1;
 
             var dealingSide = Sides.North;
 
             var outputData = new List<string>();
 
-            var sortOrderString = ConfigurationManager.AppSettings["SortOrder"];
+            var sortBySuitSetting = ConfigurationManager.AppSettings["SortBySuit"];
+            var allow4OfAKindSetting = ConfigurationManager.AppSettings["Allow4OfAKind"];
+            var maxSequenceLengthSetting = ConfigurationManager.AppSettings["MaxSequenceLength"];
+            var sortBySuitParamParseSuccess = Enum.TryParse<bool>(sortBySuitSetting, out var sortBySuitValue);
+            var allow4OfAKindParamParseSuccess = Enum.TryParse<bool>(sortBySuitSetting, out var allow4OfAKindValue);
+            var maxSequenceLengthParamParseSuccess = Enum.TryParse<int>(sortBySuitSetting, out var maxSequenceLengthValue);
 
             Console.OutputEncoding = Encoding.Unicode;
 
-            if (string.IsNullOrEmpty(sortOrderString) || !Enum.TryParse<SortOrders>(sortOrderString, out var sortOrders))
+            if (sortBySuitParamParseSuccess && !sortBySuitValue)
             {
-                sortOrders = SortOrders.Suit;
+                sortOrders = SortOrders.NoTrumps;
+            }
+
+            if(allow4OfAKindParamParseSuccess && !allow4OfAKindValue)
+            {
+                allow4OfAKind = false;
+            }
+
+            if (maxSequenceLengthParamParseSuccess && maxSequenceLengthValue > 0 && maxSequenceLengthValue < 8)
+            {
+                maxSequenceLength = maxSequenceLengthValue;
             }
 
             Console.WriteLine("Карти за Бридж Белот");
@@ -44,10 +63,15 @@
                 var initial5CardDealt = cards.Initial5CardsDealt;
                 var additional3CardDealt = cards.Additional3CardsDealt;
 
-                if (Rules.Discard(cardsDealt, 5))
+                if (!allow4OfAKind && Rules.FourOfAKindCheck(cardsDealt))
                 {
-                    // Discard cards dealt where there are either 4 of a kind, e.g. 4 Jacks, 
-                    // or a player suite where there are 5 or more long sequences, e.g. 9 10 J Q K
+                    // Discard deals containing 4 of a kind
+                    continue;
+                }
+
+                if (maxSequenceLength > 0 && Rules.LongSequencesCheck(cardsDealt, maxSequenceLength))
+                {
+                    // Discard deals containing sequences longer that specified
                     continue;
                 }
 

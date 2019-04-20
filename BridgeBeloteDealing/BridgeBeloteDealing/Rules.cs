@@ -14,12 +14,8 @@
             AllBelotCards = new List<BeloteCards> { BeloteCards.Seven, BeloteCards.Eight, BeloteCards.Nine, BeloteCards.Ten, BeloteCards.Jack, BeloteCards.Queen, BeloteCards.King, BeloteCards.Ace };
         }
 
-        public static bool Discard(List<List<Card>> allCardsDealt, int maxLengthDiscard)
-        {
-            return FourOfAKindCheck(allCardsDealt) || LongSequencesCheck(allCardsDealt, maxLengthDiscard);
-        }
 
-        private static bool FourOfAKindCheck(List<List<Card>> allCardsDealt)
+        public static bool FourOfAKindCheck(List<List<Card>> allCardsDealt)
         {
             foreach (var cardThatCounts in CardsThatCount)
             {
@@ -32,7 +28,7 @@
             return false;
         }
 
-        private static bool LongSequencesCheck(List<List<Card>> allCardsDealt, int maxLengthDiscard)
+        public static bool LongSequencesCheck(List<List<Card>> allCardsDealt, int maxLengthDiscard)
         {
             var skip = 0;
 
