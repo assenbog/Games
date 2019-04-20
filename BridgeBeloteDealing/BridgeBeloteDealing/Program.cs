@@ -24,9 +24,9 @@
             var sortBySuitSetting = ConfigurationManager.AppSettings["SortBySuit"];
             var allow4OfAKindSetting = ConfigurationManager.AppSettings["Allow4OfAKind"];
             var maxSequenceLengthSetting = ConfigurationManager.AppSettings["MaxSequenceLength"];
-            var sortBySuitParamParseSuccess = Enum.TryParse<bool>(sortBySuitSetting, out var sortBySuitValue);
-            var allow4OfAKindParamParseSuccess = Enum.TryParse<bool>(sortBySuitSetting, out var allow4OfAKindValue);
-            var maxSequenceLengthParamParseSuccess = Enum.TryParse<int>(sortBySuitSetting, out var maxSequenceLengthValue);
+            var sortBySuitParamParseSuccess = bool.TryParse(sortBySuitSetting, out var sortBySuitValue);
+            var allow4OfAKindParamParseSuccess = bool.TryParse(sortBySuitSetting, out var allow4OfAKindValue);
+            var maxSequenceLengthParamParseSuccess = int.TryParse(sortBySuitSetting, out var maxSequenceLengthValue);
 
             Console.OutputEncoding = Encoding.Unicode;
 
