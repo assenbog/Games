@@ -9,7 +9,7 @@
     {
         static void Main()
         {
-            const int MaxDealCount = 32;
+            const int DefaultMaxDealCount = 32;
 
             var sortOrders = SortOrders.Suit;
             var allow4OfAKind = true;
@@ -24,9 +24,11 @@
             var sortBySuitSetting = ConfigurationManager.AppSettings["SortBySuit"];
             var allow4OfAKindSetting = ConfigurationManager.AppSettings["Allow4OfAKind"];
             var maxSequenceLengthSetting = ConfigurationManager.AppSettings["MaxSequenceLength"];
+            var maxDealCountSetting = ConfigurationManager.AppSettings["MaxDealCount"];
             var sortBySuitParamParseSuccess = bool.TryParse(sortBySuitSetting, out var sortBySuitValue);
-            var allow4OfAKindParamParseSuccess = bool.TryParse(sortBySuitSetting, out var allow4OfAKindValue);
-            var maxSequenceLengthParamParseSuccess = int.TryParse(sortBySuitSetting, out var maxSequenceLengthValue);
+            var allow4OfAKindParamParseSuccess = bool.TryParse(allow4OfAKindSetting, out var allow4OfAKindValue);
+            var maxSequenceLengthParamParseSuccess = int.TryParse(maxSequenceLengthSetting, out var maxSequenceLengthValue);
+            var maxDealCountParamParseSuccess = int.TryParse(maxDealCountSetting, out var maxDealCountValue);
 
             Console.OutputEncoding = Encoding.Unicode;
 
@@ -45,10 +47,15 @@
                 maxSequenceLength = maxSequenceLengthValue;
             }
 
+            if(!maxDealCountParamParseSuccess)
+            {
+                maxDealCountValue = DefaultMaxDealCount;
+            }
+
             Console.WriteLine("Карти за Бридж Белот");
             Console.WriteLine("====================");
 
-            while (dealCount <= MaxDealCount)
+            while (dealCount <= maxDealCountValue)
             {
                 if(outputData.Count > 0)
                 {
