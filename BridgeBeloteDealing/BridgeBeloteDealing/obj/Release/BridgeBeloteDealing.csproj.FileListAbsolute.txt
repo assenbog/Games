@@ -1,7 +1,7 @@
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\BridgeBeloteDealing.exe.config
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\BridgeBeloteDealing.exe
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\BridgeBeloteDealing.pdb
-C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.csprojAssemblyReference.cache
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.csproj.CoreCompileInputs.cache
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.exe
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.pdb
+C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.csprojAssemblyReference.cache

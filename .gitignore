@@ -23,6 +23,9 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
+bin/
+obj/
+.vs/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
@@ -87,6 +90,7 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
+*.exe
 
 # Chutzpah Test files
 _Chutzpah*
