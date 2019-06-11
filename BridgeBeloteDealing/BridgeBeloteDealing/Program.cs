@@ -1,7 +1,9 @@
 ﻿namespace BridgeBeloteDealing
 {
+    using BridgeBeloteDealing.CardDealing;
     using BridgeBeloteDealing.Dealing;
     using BridgeBeloteDealing.IO;
+    using BridgeBeloteDealing.IO.EF;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -66,7 +68,7 @@
                     outputData.Add(string.Empty);
                 }
 
-                var cards = new Dealing.Dealing(sortOrders);
+                var cards = new CardDealing.Dealing(sortOrders);
 
                 var cardsDealt = cards.CardsDealt();
                 var initial5CardDealt = cards.Initial5CardsDealt;
@@ -98,6 +100,9 @@
                 {
                     continue;
                 }
+
+                DbPersistence.SaveDealings(cardsDealt, sortOrders);
+
 
                 formattedOutput.ForEach(p => outputData.Add(p));
 

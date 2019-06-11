@@ -1,4 +1,4 @@
-﻿namespace BridgeBeloteDealing.Dealing
+﻿namespace BridgeBeloteDealing.CardDealing
 {
     using System.ComponentModel;
 

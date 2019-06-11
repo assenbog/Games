@@ -1,4 +1,4 @@
-﻿namespace BridgeBeloteDealing.Dealing
+﻿namespace BridgeBeloteDealing.CardDealing
 {
     using System;
     using System.Collections.Generic;
@@ -76,6 +76,11 @@
             var playerEastCards = new List<Card>(playerEastThreeCards);
             playerEastCards.AddRange(playerEastTwoCards);
 
+            playerNorthCards.ForEach(p => { p.Side = Sides.North; p.Stage = Stages.FiveCards; });
+            playerWestCards.ForEach(p => { p.Side = Sides.West; p.Stage = Stages.FiveCards; });
+            playerSouthCards.ForEach(p => { p.Side = Sides.South; p.Stage = Stages.FiveCards; });
+            playerEastCards.ForEach(p => { p.Side = Sides.East; p.Stage = Stages.FiveCards; });
+
             return new List<List<Card>>
             {
                 playerNorthCards.OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList(),
@@ -100,12 +105,17 @@
             var playerEastOrderedThreeCards = playerEastThreeCards.OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList();
             _alreadyDealt.AddRange(playerEastOrderedThreeCards);
 
-            var player1Cards = new List<Card>(playerNorthOrderedThreeCards);
-            var player2Cards = new List<Card>(playerWestOrderedThreeCards);
-            var player3Cards = new List<Card>(playerSouthOrderedThreeCards);
-            var player4Cards = new List<Card>(playerEastOrderedThreeCards);
+            var playerNorthCards = new List<Card>(playerNorthOrderedThreeCards);
+            var playerWestCards = new List<Card>(playerWestOrderedThreeCards);
+            var playerSouthCards = new List<Card>(playerSouthOrderedThreeCards);
+            var playerEastCards = new List<Card>(playerEastOrderedThreeCards);
 
-            return new List<List<Card>> { player1Cards, player2Cards, player3Cards, player4Cards };
+            playerNorthCards.ForEach(p => { p.Side = Sides.North; p.Stage = Stages.ThreeCards; });
+            playerWestCards.ForEach(p => { p.Side = Sides.West; p.Stage = Stages.ThreeCards; });
+            playerSouthCards.ForEach(p => { p.Side = Sides.South; p.Stage = Stages.ThreeCards; });
+            playerEastCards.ForEach(p => { p.Side = Sides.East; p.Stage = Stages.ThreeCards; });
+
+            return new List<List<Card>> { playerNorthCards, playerWestCards, playerSouthCards, playerEastCards };
         }
 
         private void InitialiseDeck()

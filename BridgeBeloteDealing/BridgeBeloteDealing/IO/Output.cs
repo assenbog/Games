@@ -1,6 +1,6 @@
 ﻿namespace BridgeBeloteDealing.IO
 {
-    using BridgeBeloteDealing.Dealing;
+    using BridgeBeloteDealing.CardDealing;
     using BridgeBeloteDealing.Utilities;
     using System;
     using System.Collections.Generic;
