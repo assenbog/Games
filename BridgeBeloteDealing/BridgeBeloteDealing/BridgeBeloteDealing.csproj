@@ -119,6 +119,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Database\DbBeloteCards.sql" />
+    <Content Include="Database\DbCards.sql" />
+    <Content Include="Database\DbDealings.sql" />
+    <Content Include="Database\DbSides.sql" />
+    <Content Include="Database\DbSortOrders.sql" />
+    <Content Include="Database\DbStages.sql" />
+    <Content Include="Database\DbSuits.sql" />
+    <Content Include="Database\DealingCards.sql" />
     <Content Include="IO\EF\BridgeBelotModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>BridgeBelotModel.edmx</DependentUpon>
