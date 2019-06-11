@@ -20,30 +20,34 @@
             _alreadyDealt = new List<Card>();
 
             InitialiseDeck();
+
+            DealTheCards();
         }
 
-        public List<List<Card>> Initial5CardsDealt { get; set; }
+        public List<List<Card>> Initial5CardsDealt { get; private set; }
 
-        public List<List<Card>> Additional3CardsDealt { get; set; }
+        public List<List<Card>> Additional3CardsDealt { get; private set; }
 
-        public List<List<Card>> CardsDealt()
+        public List<List<Card>> AllCardsDealt { get; private set; }
+
+        private void DealTheCards()
         {
             Initial5CardsDealt = GetInitial5CardsDealt();
             Additional3CardsDealt = GetAdditional3CardsDealt();
 
-            var cardsDeal = new List<List<Card>> { new List<Card>(Initial5CardsDealt[0]), new List<Card>(Initial5CardsDealt[1]), new List<Card>(Initial5CardsDealt[2]), new List<Card>(Initial5CardsDealt[3]) };
+            var cardsDealt = new List<List<Card>> { new List<Card>(Initial5CardsDealt[0]), new List<Card>(Initial5CardsDealt[1]), new List<Card>(Initial5CardsDealt[2]), new List<Card>(Initial5CardsDealt[3]) };
 
             for (var i = 0; i < 4; i++)
             {
-                cardsDeal[i].AddRange(Additional3CardsDealt[i]);
+                cardsDealt[i].AddRange(Additional3CardsDealt[i]);
             }
 
-            return new List<List<Card>>
+            AllCardsDealt = new List<List<Card>>
             {
-                cardsDeal[0].OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList(),
-                cardsDeal[1].OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList(),
-                cardsDeal[2].OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList(),
-                cardsDeal[3].OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList()
+                cardsDealt[0].OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList(),
+                cardsDealt[1].OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList(),
+                cardsDealt[2].OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList(),
+                cardsDealt[3].OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList()
             };
         }
 

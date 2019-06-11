@@ -1,7 +1,5 @@
-﻿namespace BridgeBeloteDealing
+﻿namespace BridgeBeloteDealing.CardDealing
 {
-    using BridgeBeloteDealing.CardDealing;
-
     public class Card
     {
         public Suits Suit { get; set; }

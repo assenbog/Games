@@ -1,5 +1,6 @@
 ﻿namespace BridgeBeloteDealing.IO.EF
 {
+    using BridgeBeloteDealing.CardDealing;
     using CardDealing;
     using System;
     using System.Collections.Generic;

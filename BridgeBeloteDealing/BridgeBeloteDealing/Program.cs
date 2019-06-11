@@ -1,7 +1,6 @@
 ﻿namespace BridgeBeloteDealing
 {
     using BridgeBeloteDealing.CardDealing;
-    using BridgeBeloteDealing.Dealing;
     using BridgeBeloteDealing.IO;
     using BridgeBeloteDealing.IO.EF;
     using System;
@@ -68,19 +67,19 @@
                     outputData.Add(string.Empty);
                 }
 
-                var cards = new CardDealing.Dealing(sortOrders);
+                var cards = new Dealing(sortOrders);
 
-                var cardsDealt = cards.CardsDealt();
+                var allCardsDealt = cards.AllCardsDealt;
                 var initial5CardDealt = cards.Initial5CardsDealt;
                 var additional3CardDealt = cards.Additional3CardsDealt;
 
-                if (!allow4OfAKind && Rules.FourOfAKindCheck(cardsDealt))
+                if (!allow4OfAKind && Rules.FourOfAKindCheck(allCardsDealt))
                 {
                     // Discard deals containing 4 of a kind
                     continue;
                 }
 
-                if (maxSequenceLength > 0 && Rules.LongSequencesCheck(cardsDealt, maxSequenceLength))
+                if (maxSequenceLength > 0 && Rules.LongSequencesCheck(allCardsDealt, maxSequenceLength))
                 {
                     // Discard deals containing sequences longer that specified
                     continue;
@@ -101,7 +100,7 @@
                     continue;
                 }
 
-                DbPersistence.SaveDealings(cardsDealt, sortOrders);
+                DbPersistence.SaveDealings(allCardsDealt, sortOrders);
 
 
                 formattedOutput.ForEach(p => outputData.Add(p));

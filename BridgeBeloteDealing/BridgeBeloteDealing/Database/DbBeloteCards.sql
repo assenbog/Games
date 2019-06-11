@@ -1,26 +1,41 @@
 USE [BridgeBelot]
 GO
 
-/****** Object:  Table [dbo].[DbBeloteCards]    Script Date: 11/06/2019 12:30:38 ******/
+/****** Object:  UserDefinedFunction [dbo].[DealingCards]    Script Date: 11/06/2019 15:34:01 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[DbBeloteCards](
-	[Value] [int] NOT NULL,
-	[Name] [nchar](10) NOT NULL,
-	[Description] [nchar](10) NOT NULL,
-	[SuitSortOrder] [int] NOT NULL,
- CONSTRAINT [PK_BeloteCards] PRIMARY KEY NONCLUSTERED 
+
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE FUNCTION [dbo].[DealingCards]
+(	
+	@dealingId int
+)
+RETURNS TABLE 
+AS
+RETURN 
 (
-	[Value] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
- CONSTRAINT [IX_BeloteCards] UNIQUE CLUSTERED 
-(
-	[Value] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+	-- Add the SELECT statement with parameter references here
+	SELECT DbBeloteCards.[Name] BridgeBelotCard
+	, DbSuits.[Name] Suit
+	, DbSides.[Name] Side
+	, DbStages.[Name] Stage
+	, DbBeloteCards.SuitSortOrder
+	, DbBeloteCards.NoTrumpSortOrder
+from  DbCards
+inner join DbSuits on DbCards.Suit = DbSuits.[Value]
+inner join DbStages on DbCards.Stage = DbStages.[Value]
+inner join DbSides on DbCards.Side = DbSides.[Value]
+inner join DbBeloteCards on DbCards.BeloteCard = DbBeloteCards.[Value]
+where DbCards.dealingid = @dealingId
+
+)
 GO
 

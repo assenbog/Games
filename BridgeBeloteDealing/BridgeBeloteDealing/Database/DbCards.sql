@@ -1,7 +1,7 @@
 USE [BridgeBelot]
 GO
 
-/****** Object:  Table [dbo].[DbCards]    Script Date: 11/06/2019 12:30:54 ******/
+/****** Object:  Table [dbo].[DbCards]    Script Date: 11/06/2019 14:45:38 ******/
 SET ANSI_NULLS ON
 GO
 

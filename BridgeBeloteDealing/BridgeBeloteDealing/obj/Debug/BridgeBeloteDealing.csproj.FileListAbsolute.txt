@@ -9,3 +9,4 @@ C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Debug\EntityFramewor
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Debug\EntityFramework.xml
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Debug\EntityFramework.SqlServer.xml
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Debug\BridgeBeloteDealing.csproj.CopyComplete
+C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Debug\BridgeBeloteDealing.csprojAssemblyReference.cache
