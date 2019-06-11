@@ -1,4 +1,6 @@
-﻿namespace BridgeBeloteDealing
+﻿using BridgeBeloteDealing.Dealing;
+
+namespace BridgeBeloteDealing
 {
     public class Card
     {

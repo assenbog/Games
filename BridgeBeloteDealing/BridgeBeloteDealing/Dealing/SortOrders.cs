@@ -1,4 +1,4 @@
-﻿namespace BridgeBeloteDealing
+﻿namespace BridgeBeloteDealing.Dealing
 {
     public enum SortOrders
     {

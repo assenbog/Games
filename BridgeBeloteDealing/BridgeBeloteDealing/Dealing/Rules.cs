@@ -1,4 +1,4 @@
-﻿namespace BridgeBeloteDealing
+﻿namespace BridgeBeloteDealing.Dealing
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -43,7 +43,7 @@
 
                 foreach (var cardsDealt in allCardsDealt)
                 {
-                    var sameSuitCards = cardsDealt.GroupBy(p => p.Suit, p => p.BelotCard, (key, value) => new { Key = key, SuitCards = value.ToList()});
+                    var sameSuitCards = cardsDealt.GroupBy(p => p.Suit, p => p.BelotCard, (key, value) => new { Key = key, SuitCards = value.ToList() });
 
                     foreach (var suitCardsDealt in sameSuitCards)
                     {

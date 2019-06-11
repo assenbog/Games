@@ -1,5 +1,7 @@
 ﻿namespace BridgeBeloteDealing
 {
+    using BridgeBeloteDealing.Dealing;
+    using BridgeBeloteDealing.IO;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -64,7 +66,7 @@
                     outputData.Add(string.Empty);
                 }
 
-                var cards = new Cards(sortOrders);
+                var cards = new Dealing.Dealing(sortOrders);
 
                 var cardsDealt = cards.CardsDealt();
                 var initial5CardDealt = cards.Initial5CardsDealt;

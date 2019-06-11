@@ -1,4 +1,4 @@
-﻿namespace BridgeBeloteDealing
+﻿namespace BridgeBeloteDealing.Utilities
 {
     using System.ComponentModel;
 

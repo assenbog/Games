@@ -1,10 +1,10 @@
-﻿namespace BridgeBeloteDealing
+﻿namespace BridgeBeloteDealing.Dealing
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Cards
+    public class Dealing
     {
         private readonly List<Card> _alreadyDealt;
         private readonly List<Card> _deck;
@@ -12,7 +12,7 @@
         private Dictionary<BeloteCards, int> _belotCardsNoTrumpsOrder;
         private readonly SortOrders _sortOrders;
 
-        public Cards(SortOrders sortOrders)
+        public Dealing(SortOrders sortOrders)
         {
             _sortOrders = sortOrders;
 
@@ -116,7 +116,7 @@
             {
                 foreach (var belotCard in Enum.GetValues(typeof(BeloteCards)).Cast<BeloteCards>())
                 {
-                    _deck.Add(new Card {BelotCard = belotCard, Suit = suit, RandomSequence = random.Next()});
+                    _deck.Add(new Card { BelotCard = belotCard, Suit = suit, RandomSequence = random.Next() });
                 }
             }
 

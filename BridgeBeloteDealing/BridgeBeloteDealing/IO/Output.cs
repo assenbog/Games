@@ -1,5 +1,7 @@
-﻿namespace BridgeBeloteDealing
+﻿namespace BridgeBeloteDealing.IO
 {
+    using BridgeBeloteDealing.Dealing;
+    using BridgeBeloteDealing.Utilities;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -85,9 +87,9 @@
             var heartsStringBuilder = new StringBuilder($"{prefix}\u2665");
             var spadesStringBuilder = new StringBuilder($"{prefix}\u2660");
 
-            var initial5CardSuits = initial5CardDealt.GroupBy(p => p.Suit).Select(g => new { Suit = g.Key, CardsInSuit = g.ToList<Card>() }).ToArray();
+            var initial5CardSuits = initial5CardDealt.GroupBy(p => p.Suit).Select(g => new { Suit = g.Key, CardsInSuit = g.ToList() }).ToArray();
 
-            var additional3CardSuits = additional3CardDealt.GroupBy(p => p.Suit).Select(g => new { Suit = g.Key, CardsInSuit = g.ToList<Card>() }).ToArray();
+            var additional3CardSuits = additional3CardDealt.GroupBy(p => p.Suit).Select(g => new { Suit = g.Key, CardsInSuit = g.ToList() }).ToArray();
 
             var initialClubsCards = initial5CardSuits.FirstOrDefault(p => p.Suit == Suits.Clubs)?.CardsInSuit;
             var initialDiamondsCards = initial5CardSuits.FirstOrDefault(p => p.Suit == Suits.Diamonds)?.CardsInSuit;
