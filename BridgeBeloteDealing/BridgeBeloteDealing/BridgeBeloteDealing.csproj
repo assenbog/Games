@@ -127,6 +127,7 @@
     <Content Include="Database\DbStages.sql" />
     <Content Include="Database\DbSuits.sql" />
     <Content Include="Database\DealingCards.sql" />
+    <Content Include="Database\DealingCardsDate.sql" />
     <Content Include="IO\EF\BridgeBelotModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>BridgeBelotModel.edmx</DependentUpon>
