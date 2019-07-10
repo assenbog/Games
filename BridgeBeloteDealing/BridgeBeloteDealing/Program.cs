@@ -18,7 +18,9 @@
             var allow4OfAKind = true;
             var maxSequenceLength = 0;
 
-            var dealCount = 1;
+            var dealings = new List<Dealing>();
+
+            var dealSequence = 1;
 
             var dealingSide = Sides.North;
 
@@ -55,10 +57,12 @@
                 maxDealCountValue = DefaultMaxDealCount;
             }
 
+            var shuffledSequenceNos = ShuffledSequenceNos(maxDealCountValue);
+
             Console.WriteLine("Карти за Бридж Белот");
             Console.WriteLine("====================");
 
-            while (dealCount <= maxDealCountValue)
+            while (dealSequence <= maxDealCountValue)
             {
                 if(outputData.Count > 0)
                 {
@@ -67,11 +71,11 @@
                     outputData.Add(string.Empty);
                 }
 
-                var cards = new Dealing(sortOrders);
+                var dealing = new Dealing(sortOrders, dealSequence, shuffledSequenceNos[dealSequence - 1], dealingSide);
 
-                var allCardsDealt = cards.AllCardsDealt;
-                var initial5CardDealt = cards.Initial5CardsDealt;
-                var additional3CardDealt = cards.Additional3CardsDealt;
+                var allCardsDealt = dealing.AllCardsDealt;
+                var initial5CardDealt = dealing.Initial5CardsDealt;
+                var additional3CardDealt = dealing.Additional3CardsDealt;
 
                 if (!allow4OfAKind && Rules.FourOfAKindCheck(allCardsDealt))
                 {
@@ -85,9 +89,12 @@
                     continue;
                 }
 
-                var formattedOutput = Output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealCount, dealingSide);
+                dealings.Add(dealing);
 
-                Console.WriteLine($"\n\nРаздаване #{dealCount}\n");
+                // Note: No shuffled sequence numbers in the initial dealings set
+                var formattedOutput = Output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealing.SequenceNo, default, dealingSide);
+
+                Console.WriteLine($"\n\nРаздаване #{dealSequence}\n");
 
                 formattedOutput.ForEach(p => Console.WriteLine(p));
 
@@ -100,23 +107,54 @@
                     continue;
                 }
 
-                DbPersistence.SaveDealings(allCardsDealt, sortOrders);
-
-
                 formattedOutput.ForEach(p => outputData.Add(p));
 
                 outputData.Add(string.Empty);
 
                 dealingSide = (Sides)(((int)dealingSide + 1) % 4);
 
-                dealCount++;
+                dealSequence++;
+            }
+
+            // Now add the rotated and shuffled second dealings set
+            foreach(var dealing in dealings)
+            {
+                outputData.Add(string.Empty);
+                outputData.Add(new string('=', 80));
+                outputData.Add(string.Empty);
+
+                var formattedOutput = Output.FormattedOutput(dealing.Initial5CardsDealRotated, dealing.Additional3CardsDealtRotated, dealing.SequenceNo + maxDealCountValue, dealing.ShuffledSequenceNo, dealing.DealingSide);
+
+                formattedOutput.ForEach(p => outputData.Add(p));
             }
 
             Output.SaveDealResults(outputData);
 
+            DbPersistence.SaveAllDealings(dealings, sortOrders);
+
             Console.Write("\nPress any key to exit ... ");
 
             Console.ReadKey();
+        }
+
+        private static List<int> ShuffledSequenceNos(int maxDealCount)
+        {
+            var dealingRandomSequence = new Random(Guid.NewGuid().GetHashCode());
+
+            var shuffledSequenceList = new List<int>();
+
+            while(shuffledSequenceList.Count < maxDealCount)
+            {
+                // Next range doesn't include the max values, i.e. we have an [min, max) interval
+                var nextSequenceNo = dealingRandomSequence.Next(1, maxDealCount + 1);
+
+                if(!shuffledSequenceList.Contains(nextSequenceNo))
+                {
+                    shuffledSequenceList.Add(nextSequenceNo);
+                }
+            }
+
+            return shuffledSequenceList;
         }
     }
 }

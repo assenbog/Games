@@ -42,9 +42,9 @@
             }
         }
 
-        public static List<string> FormattedOutput(List<List<Card>> initial5CardDealt, List<List<Card>> additional3CardDealt, int dealCount, Sides dealer)
+        public static List<string> FormattedOutput(List<List<Card>> initial5CardDealt, List<List<Card>> additional3CardDealt, int sequenceNo, int? shuffledSequenceNo, Sides dealer)
         {
-            const int eastWestSpaceAdjuster = 50;
+            const int eastWestSpaceAdjuster = 56;
             const int leadingSpaceAdjuster = 25;
 
             var halfEastWestSpaceAdjuster = eastWestSpaceAdjuster / 2;
@@ -54,7 +54,9 @@
             var southCards = SideOutput(initial5CardDealt[2], additional3CardDealt[2], dealer == Sides.South);
             var eastCards = SideOutput(initial5CardDealt[3], additional3CardDealt[3], dealer == Sides.East);
 
-            var dealNumber = $"# {dealCount:##}";
+            var shuffledSequenceNoAsString = shuffledSequenceNo.HasValue ? $" -> {shuffledSequenceNo.Value.ToString("##")}" : string.Empty;
+            var prefix = shuffledSequenceNo.HasValue ? string.Empty : new string(' ', 3);
+            var dealNumber = $"{prefix}# {sequenceNo:##}{shuffledSequenceNoAsString}";
             var currentDate = DateTime.Now.ToString("dd/MM/yy");
 
             return new List<string>

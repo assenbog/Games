@@ -23,6 +23,8 @@ namespace BridgeBeloteDealing.IO.EF
         public int Value { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int SuitSortOrder { get; set; }
+        public int NoTrumpSortOrder { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DbCard> DbCards { get; set; }

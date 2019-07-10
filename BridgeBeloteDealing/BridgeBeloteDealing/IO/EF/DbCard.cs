@@ -20,6 +20,8 @@ namespace BridgeBeloteDealing.IO.EF
         public int Side { get; set; }
         public int Stage { get; set; }
         public int BeloteCard { get; set; }
+        public Nullable<int> SequenceNo { get; set; }
+        public Nullable<int> ShuffledSequenceNo { get; set; }
     
         public virtual DbBeloteCard DbBeloteCard { get; set; }
         public virtual DbSide DbSide { get; set; }

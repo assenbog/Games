@@ -1,7 +1,7 @@
 USE [BridgeBelot]
 GO
 
-/****** Object:  Table [dbo].[DbCards]    Script Date: 11/06/2019 14:45:38 ******/
+/****** Object:  Table [dbo].[DbCards]    Script Date: 07/07/2019 09:29:53 ******/
 SET ANSI_NULLS ON
 GO
 
@@ -15,6 +15,8 @@ CREATE TABLE [dbo].[DbCards](
 	[Side] [int] NOT NULL,
 	[Stage] [int] NOT NULL,
 	[BeloteCard] [int] NOT NULL,
+	[SequenceNo] [int] NULL,
+	[ShuffledSequenceNo] [int] NULL,
  CONSTRAINT [PK_Cards] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -56,4 +58,5 @@ GO
 
 ALTER TABLE [dbo].[DbCards] CHECK CONSTRAINT [FK_DbCards_DbDealings]
 GO
+
 
