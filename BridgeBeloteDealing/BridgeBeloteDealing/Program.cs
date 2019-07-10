@@ -6,6 +6,7 @@
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Linq;
     using System.Text;
 
     class Program
@@ -30,10 +31,13 @@
             var allow4OfAKindSetting = ConfigurationManager.AppSettings["Allow4OfAKind"];
             var maxSequenceLengthSetting = ConfigurationManager.AppSettings["MaxSequenceLength"];
             var maxDealCountSetting = ConfigurationManager.AppSettings["MaxDealCount"];
+            var saveToDatabaseSetting = ConfigurationManager.AppSettings["SaveToDatabase"];
+
             var sortBySuitParamParseSuccess = bool.TryParse(sortBySuitSetting, out var sortBySuitValue);
             var allow4OfAKindParamParseSuccess = bool.TryParse(allow4OfAKindSetting, out var allow4OfAKindValue);
             var maxSequenceLengthParamParseSuccess = int.TryParse(maxSequenceLengthSetting, out var maxSequenceLengthValue);
             var maxDealCountParamParseSuccess = int.TryParse(maxDealCountSetting, out var maxDealCountValue);
+            var saveToDatabaseParseSuccess = bool.TryParse(saveToDatabaseSetting, out var saveToDatabaseValue);
 
             Console.OutputEncoding = Encoding.Unicode;
 
@@ -117,20 +121,24 @@
             }
 
             // Now add the rotated and shuffled second dealings set
-            foreach(var dealing in dealings)
+            foreach(var dealing in dealings.OrderBy(p => p.ShuffledSequenceNo))
             {
                 outputData.Add(string.Empty);
                 outputData.Add(new string('=', 80));
                 outputData.Add(string.Empty);
 
-                var formattedOutput = Output.FormattedOutput(dealing.Initial5CardsDealRotated, dealing.Additional3CardsDealtRotated, dealing.SequenceNo + maxDealCountValue, dealing.ShuffledSequenceNo, dealing.DealingSide);
+                var formattedOutput = Output.FormattedOutput(dealing.Initial5CardsDealRotated, dealing.Additional3CardsDealtRotated, dealing.ShuffledSequenceNo + maxDealCountValue, dealing.SequenceNo, dealing.DealingSide);
 
                 formattedOutput.ForEach(p => outputData.Add(p));
             }
 
             Output.SaveDealResults(outputData);
 
-            DbPersistence.SaveAllDealings(dealings, sortOrders);
+            // Only save to DB when configured to do so
+            if (saveToDatabaseParseSuccess && saveToDatabaseValue)
+            {
+                DbPersistence.SaveAllDealings(dealings, sortOrders);
+            }
 
             Console.Write("\nPress any key to exit ... ");
 
