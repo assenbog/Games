@@ -96,7 +96,7 @@
                 dealings.Add(dealing);
 
                 // Note: No shuffled sequence numbers in the initial dealings set
-                var formattedOutput = Output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealing.SequenceNo, default, dealingSide);
+                var formattedOutput = Output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealing.SequenceNo, dealing.ShuffledSequenceNo + maxDealCountValue, dealingSide);
 
                 Console.WriteLine($"\n\nРаздаване #{dealSequence}\n");
 
@@ -127,7 +127,7 @@
                 outputData.Add(new string('=', 80));
                 outputData.Add(string.Empty);
 
-                var formattedOutput = Output.FormattedOutput(dealing.Initial5CardsDealRotated, dealing.Additional3CardsDealtRotated, dealing.ShuffledSequenceNo + maxDealCountValue, dealing.SequenceNo, dealing.DealingSide);
+                var formattedOutput = Output.FormattedOutput(dealing.Initial5CardsDealt, dealing.Additional3CardsDealt, dealing.ShuffledSequenceNo + maxDealCountValue, dealing.SequenceNo, dealing.DealingSide);
 
                 formattedOutput.ForEach(p => outputData.Add(p));
             }

@@ -23,7 +23,7 @@
                     // ... followed by the swapped sides ones
                     for (var dealingNo = 0; dealingNo < dealings.Count; dealingNo++)
                     {
-                        SaveDealings(dbContext, dealings[dealingNo].AllCardsDealtRotated, sortOrder, dealingNo + dealingsCount + 1, dealings[dealingNo].ShuffledSequenceNo);
+                        SaveDealings(dbContext, dealings[dealingNo].AllCardsDealt, sortOrder, dealingNo + dealingsCount + 1, dealings[dealingNo].ShuffledSequenceNo);
                     }
                 }
             }

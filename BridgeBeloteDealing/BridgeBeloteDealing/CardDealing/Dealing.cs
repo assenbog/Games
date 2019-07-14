@@ -11,7 +11,6 @@
         private Dictionary<BeloteCards, int> _belotCardsSuitOrder;
         private Dictionary<BeloteCards, int> _belotCardsNoTrumpsOrder;
         private readonly SortOrders _sortOrders;
-        private readonly Dictionary<Sides, Sides> _sidesRotation;
 
         public Dealing(SortOrders sortOrders, int sequenceNo, int shuffledSequenceNo, Sides dealingSide)
         {
@@ -20,15 +19,6 @@
             SequenceNo = sequenceNo;
             ShuffledSequenceNo = shuffledSequenceNo;
             DealingSide = dealingSide;
-
-            // Sides anticlockwise rotation
-            _sidesRotation = new Dictionary<Sides, Sides>
-            {
-                { Sides.North, Sides.West },
-                { Sides.West, Sides.South },
-                { Sides.South, Sides.East },
-                { Sides.East, Sides.North }
-            };
 
             _deck = new List<Card>();
             _alreadyDealt = new List<Card>();
@@ -50,18 +40,10 @@
 
         public List<List<Card>> AllCardsDealt { get; private set; }
 
-        public List<List<Card>> Initial5CardsDealRotated { get; private set; }
-
-        public List<List<Card>> Additional3CardsDealtRotated { get; private set; }
-
-        public List<List<Card>> AllCardsDealtRotated { get; private set; }
-
         private void DealTheCards()
         {
             Initial5CardsDealt = GetInitial5CardsDealt();
-            Initial5CardsDealRotated = RotateSides(Initial5CardsDealt);
             Additional3CardsDealt = GetAdditional3CardsDealt();
-            Additional3CardsDealtRotated = RotateSides(Additional3CardsDealt);
 
             var cardsDealt = new List<List<Card>> { new List<Card>(Initial5CardsDealt[0]), new List<Card>(Initial5CardsDealt[1]), new List<Card>(Initial5CardsDealt[2]), new List<Card>(Initial5CardsDealt[3]) };
 
@@ -77,8 +59,6 @@
                 cardsDealt[2].OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList(),
                 cardsDealt[3].OrderBy(p => p.Suit).ThenBy(p => _sortOrders == SortOrders.Suit ? _belotCardsSuitOrder[p.BelotCard] : _belotCardsNoTrumpsOrder[p.BelotCard]).ToList()
             };
-
-            AllCardsDealtRotated = RotateSides(AllCardsDealt);
         }
 
         private List<List<Card>> GetInitial5CardsDealt()
@@ -150,21 +130,6 @@
             playerEastCards.ForEach(p => { p.Side = Sides.East; p.Stage = Stages.ThreeCards; });
 
             return new List<List<Card>> { playerNorthCards, playerWestCards, playerSouthCards, playerEastCards };
-        }
-
-        private List<List<Card>> RotateSides(List<List<Card>> originalSet)
-        {
-            return originalSet.Select(sideCards => 
-                                        sideCards.Select(card => 
-                                        new Card
-                                        {
-                                            BelotCard = card.BelotCard,
-                                            RandomSequence = card.RandomSequence,
-                                            Side = _sidesRotation[card.Side],
-                                            Stage = card.Stage,
-                                            Suit = card.Suit
-                                        }).ToList())
-                               .OrderBy(sideCards => sideCards.First().Side).ToList();
         }
 
         private void InitialiseDeck()
