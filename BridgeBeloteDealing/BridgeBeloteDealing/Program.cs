@@ -120,14 +120,18 @@
                 dealSequence++;
             }
 
+            dealingSide = Sides.North;
+
             // Now add the rotated and shuffled second dealings set
-            foreach(var dealing in dealings.OrderBy(p => p.ShuffledSequenceNo))
+            foreach (var dealing in dealings.OrderBy(p => p.ShuffledSequenceNo))
             {
                 outputData.Add(string.Empty);
                 outputData.Add(new string('=', 80));
                 outputData.Add(string.Empty);
 
-                var formattedOutput = Output.FormattedOutput(dealing.Initial5CardsDealt, dealing.Additional3CardsDealt, dealing.ShuffledSequenceNo + maxDealCountValue, dealing.SequenceNo, dealing.DealingSide);
+                var formattedOutput = Output.FormattedOutput(dealing.Initial5CardsDealt, dealing.Additional3CardsDealt, dealing.ShuffledSequenceNo + maxDealCountValue, dealing.SequenceNo, dealingSide);
+
+                dealingSide = (Sides)(((int)dealingSide + 1) % 4);
 
                 formattedOutput.ForEach(p => outputData.Add(p));
             }
