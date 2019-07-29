@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    [Serializable]
     public class Dealing
     {
         private readonly List<Card> _alreadyDealt;
@@ -11,6 +12,10 @@
         private Dictionary<BeloteCards, int> _belotCardsSuitOrder;
         private Dictionary<BeloteCards, int> _belotCardsNoTrumpsOrder;
         private readonly SortOrders _sortOrders;
+
+        public Dealing()
+        {
+        }
 
         public Dealing(SortOrders sortOrders, int sequenceNo, int shuffledSequenceNo, Sides dealingSide)
         {
@@ -28,17 +33,17 @@
             DealTheCards();
         }
 
-        public Sides DealingSide { get; private set; }
+        public Sides DealingSide { get; set; }
 
-        public int SequenceNo { get; private set; }
+        public int SequenceNo { get; set; }
 
-        public int ShuffledSequenceNo { get; private set; }
+        public int ShuffledSequenceNo { get; set; }
 
-        public List<List<Card>> Initial5CardsDealt { get; private set; }
+        public List<List<Card>> Initial5CardsDealt { get; set; }
 
-        public List<List<Card>> Additional3CardsDealt { get; private set; }
+        public List<List<Card>> Additional3CardsDealt { get; set; }
 
-        public List<List<Card>> AllCardsDealt { get; private set; }
+        public List<List<Card>> AllCardsDealt { get; set; }
 
         private void DealTheCards()
         {

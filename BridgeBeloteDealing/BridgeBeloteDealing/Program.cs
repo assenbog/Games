@@ -63,6 +63,8 @@
 
             var shuffledSequenceNos = ShuffledSequenceNos(maxDealCountValue);
 
+            var output = new Output();
+
             Console.WriteLine("Карти за Бридж Белот");
             Console.WriteLine("====================");
 
@@ -96,7 +98,7 @@
                 dealings.Add(dealing);
 
                 // Note: No shuffled sequence numbers in the initial dealings set
-                var formattedOutput = Output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealing.SequenceNo, dealing.ShuffledSequenceNo + maxDealCountValue, dealingSide);
+                var formattedOutput = output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealing.SequenceNo, default, dealingSide);
 
                 Console.WriteLine($"\n\nРаздаване #{dealSequence}\n");
 
@@ -111,32 +113,69 @@
                     continue;
                 }
 
-                formattedOutput.ForEach(p => outputData.Add(p));
-
-                outputData.Add(string.Empty);
-
                 dealingSide = (Sides)(((int)dealingSide + 1) % 4);
 
                 dealSequence++;
             }
 
+            // Shuffled dealings within each side
+            var northShuffledDealings = dealings.Where(p => p.DealingSide == Sides.North).OrderBy(p => p.ShuffledSequenceNo).ToList();
+            var westShuffledDealings = dealings.Where(p => p.DealingSide == Sides.West).OrderBy(p => p.ShuffledSequenceNo).ToList();
+            var southShuffledDealings = dealings.Where(p => p.DealingSide == Sides.South).OrderBy(p => p.ShuffledSequenceNo).ToList();
+            var eastShuffledDealings = dealings.Where(p => p.DealingSide == Sides.East).OrderBy(p => p.ShuffledSequenceNo).ToList();
+
+            // Shuffled dealings: Combined random ordered sides in a sequence, i.e. North, West, South and last  - East
+            var shuffledDealings = new List<Dealing>();
+
+            // Each side will have the same number of dealings as the rest, so iterate over North to combine into a single list
+            for (var i = 0; i < northShuffledDealings.Count; i++)
+            {
+                shuffledDealings.Add(northShuffledDealings[i]);
+                shuffledDealings.Add(westShuffledDealings[i]);
+                shuffledDealings.Add(southShuffledDealings[i]);
+                shuffledDealings.Add(eastShuffledDealings[i]);
+            }
+
+            // Update the custom order sequencing
+            for (var i = 0; i < shuffledDealings.Count; i++)
+            {
+                shuffledDealings[i].ShuffledSequenceNo = maxDealCountValue + i + 1;
+            }
+
             dealingSide = Sides.North;
 
-            // Now add the rotated and shuffled second dealings set
-            foreach (var dealing in dealings.OrderBy(p => p.ShuffledSequenceNo))
+            // The original set
+            foreach (var dealing in dealings)
             {
                 outputData.Add(string.Empty);
                 outputData.Add(new string('=', 80));
                 outputData.Add(string.Empty);
 
-                var formattedOutput = Output.FormattedOutput(dealing.Initial5CardsDealt, dealing.Additional3CardsDealt, dealing.ShuffledSequenceNo + maxDealCountValue, dealing.SequenceNo, dealingSide);
+                var formattedOutput = output.FormattedOutput(dealing.Initial5CardsDealt, dealing.Additional3CardsDealt, dealing.SequenceNo, dealing.ShuffledSequenceNo, dealingSide);
 
                 dealingSide = (Sides)(((int)dealingSide + 1) % 4);
 
                 formattedOutput.ForEach(p => outputData.Add(p));
             }
 
-            Output.SaveDealResults(outputData);
+            dealingSide = Sides.North;
+
+            // Now add the shuffled second dealings set
+            foreach (var dealing in shuffledDealings)
+            {
+                outputData.Add(string.Empty);
+                outputData.Add(new string('=', 80));
+                outputData.Add(string.Empty);
+
+                var formattedOutput = output.FormattedOutput(dealing.Initial5CardsDealt, dealing.Additional3CardsDealt, dealing.ShuffledSequenceNo, dealing.SequenceNo, dealingSide);
+
+                dealingSide = (Sides)(((int)dealingSide + 1) % 4);
+
+                formattedOutput.ForEach(p => outputData.Add(p));
+            }
+
+            output.SaveDealResults(outputData);
+            output.SerialiseToXml(dealings);
 
             // Only save to DB when configured to do so
             if (saveToDatabaseParseSuccess && saveToDatabaseValue)

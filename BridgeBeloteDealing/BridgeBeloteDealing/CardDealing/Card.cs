@@ -1,5 +1,8 @@
 ﻿namespace BridgeBeloteDealing.CardDealing
 {
+    using System;
+
+    [Serializable]
     public class Card
     {
         public Suits Suit { get; set; }

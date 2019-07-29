@@ -1,7 +1,9 @@
 ﻿namespace BridgeBeloteDealing.CardDealing
 {
+    using System;
     using System.ComponentModel;
 
+    [Serializable]
     public enum BeloteCards
     {
         [Description("  7")]

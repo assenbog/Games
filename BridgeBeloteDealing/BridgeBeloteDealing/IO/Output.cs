@@ -8,26 +8,34 @@
     using System.Linq;
     using System.Reflection;
     using System.Text;
+    using System.Xml.Serialization;
 
-    public static class Output
+    public class Output
     {
-        public static void SaveDealResults(List<string> output)
+        private string fileNameWithoutExt;
+
+        public Output()
         {
             const string dataFolderName = "BelotCardDealing";
 
+            var executingAssemblyName = Assembly.GetEntryAssembly().Location;
+            var executingAssemblyPath = Path.GetDirectoryName(executingAssemblyName);
+            var now = DateTime.Now;
+            var fullDataFolder = Path.Combine(executingAssemblyPath ?? string.Empty, dataFolderName);
+            if (!Directory.Exists(fullDataFolder))
+            {
+                Directory.CreateDirectory(fullDataFolder);
+            }
+            var dateTimeStamp = now.ToString("dd MMM yyyy HH_mm");
+            var fileName = $"{dataFolderName} {dateTimeStamp}.";
+            fileNameWithoutExt = Path.Combine(fullDataFolder, fileName);
+        }
+
+        public void SaveDealResults(List<string> output)
+        {
             try
             {
-                var executingAssemblyName = Assembly.GetEntryAssembly().Location;
-                var executingAssemblyPath = Path.GetDirectoryName(executingAssemblyName);
-                var now = DateTime.Now;
-                var fullDataFolder = Path.Combine(executingAssemblyPath ?? string.Empty, dataFolderName);
-                if (!Directory.Exists(fullDataFolder))
-                {
-                    Directory.CreateDirectory(fullDataFolder);
-                }
-                var dateTimeStamp = now.ToString("dd MMM yyyy HH_mm");
-                var fileName = $"{dataFolderName} {dateTimeStamp}.txt";
-                var fullFileName = Path.Combine(fullDataFolder, fileName);
+                var fullFileName = fileNameWithoutExt + "txt";
 
                 using (var writer = new StreamWriter(new FileStream(fullFileName, FileMode.OpenOrCreate, FileAccess.Write), Encoding.Unicode))
                 {
@@ -42,7 +50,25 @@
             }
         }
 
-        public static List<string> FormattedOutput(List<List<Card>> initial5CardDealt, List<List<Card>> additional3CardDealt, int sequenceNo, int shuffledSequenceNo, Sides dealer)
+        public void SerialiseToXml(List<Dealing> dealings)
+        {
+            try
+            {
+                var fullFileName = fileNameWithoutExt + "xml";
+
+                var fs = new FileStream(fullFileName, FileMode.OpenOrCreate);
+
+                var serialiser = new XmlSerializer(typeof(List<Dealing>));
+
+                serialiser.Serialize(fs, dealings);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        public List<string> FormattedOutput(List<List<Card>> initial5CardDealt, List<List<Card>> additional3CardDealt, int sequenceNo, int? shuffledSequenceNo, Sides dealer)
         {
             const int eastWestSpaceAdjuster = 56;
             const int leadingSpaceAdjuster = 25;
@@ -54,7 +80,9 @@
             var southCards = SideOutput(initial5CardDealt[2], additional3CardDealt[2], dealer == Sides.South);
             var eastCards = SideOutput(initial5CardDealt[3], additional3CardDealt[3], dealer == Sides.East);
 
-            var dealNumber = $"# {sequenceNo:##} -> {shuffledSequenceNo}";
+            var displayShuffledSequenceNo = shuffledSequenceNo.HasValue ? shuffledSequenceNo.Value.ToString() : "N/a";
+
+            var dealNumber = $"# {sequenceNo:##} -> {displayShuffledSequenceNo}";
             var currentDate = DateTime.Now.ToString("dd/MM/yy");
 
             return new List<string>
@@ -76,7 +104,7 @@
             };
         }
 
-        private static List<string> SideOutput(List<Card> initial5CardDealt, List<Card> additional3CardDealt, bool isDealing)
+        private List<string> SideOutput(List<Card> initial5CardDealt, List<Card> additional3CardDealt, bool isDealing)
         {
             const int fiveThreesOffset = 3;
 
@@ -135,7 +163,7 @@
             return new List<string> { spadesStringBuilder.ToString(), heartsStringBuilder.ToString(), clubsStringBuilder.ToString(), diamondsStringBuilder.ToString() }; ;
         }
 
-        private static void AddAdditionalCards(List<Card> additionalCards, StringBuilder sb, int initialAdditionalSeparator)
+        private void AddAdditionalCards(List<Card> additionalCards, StringBuilder sb, int initialAdditionalSeparator)
         {
             if (additionalCards != null && additionalCards.Any())
             {
