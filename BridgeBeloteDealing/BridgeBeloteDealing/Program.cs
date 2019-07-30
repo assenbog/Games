@@ -1,8 +1,8 @@
 ﻿namespace BridgeBeloteDealing
 {
-    using BridgeBeloteDealing.CardDealing;
-    using BridgeBeloteDealing.IO;
-    using BridgeBeloteDealing.IO.EF;
+    using BridgeBeloteLogic.CardDealing;
+    using BridgeBeloteLogic.IO;
+    using BridgeBeloteLogic.IO.EF;
     using System;
     using System.Collections.Generic;
     using System.Configuration;

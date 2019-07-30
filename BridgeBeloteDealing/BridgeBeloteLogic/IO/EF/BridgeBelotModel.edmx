@@ -1,0 +1,484 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BridgeBelotModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DbBeloteCards">
+          <Key>
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Description" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="SuitSortOrder" Type="int" Nullable="false" />
+          <Property Name="NoTrumpSortOrder" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DbCards">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DealingId" Type="int" Nullable="false" />
+          <Property Name="Suit" Type="int" Nullable="false" />
+          <Property Name="Side" Type="int" Nullable="false" />
+          <Property Name="Stage" Type="int" Nullable="false" />
+          <Property Name="BeloteCard" Type="int" Nullable="false" />
+          <Property Name="SequenceNo" Type="int" />
+          <Property Name="ShuffledSequenceNo" Type="int" />
+        </EntityType>
+        <EntityType Name="DbDealings">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SortOrder" Type="int" Nullable="false" />
+          <Property Name="TimeStamp" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DbSides">
+          <Key>
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DbSortOrders">
+          <Key>
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DbStages">
+          <Key>
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DbSuits">
+          <Key>
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Value" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Description" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Cards_Sides">
+          <End Role="DbSides" Type="Self.DbSides" Multiplicity="1" />
+          <End Role="DbCards" Type="Self.DbCards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbSides">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbCards">
+              <PropertyRef Name="Side" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cards_Stages">
+          <End Role="DbStages" Type="Self.DbStages" Multiplicity="1" />
+          <End Role="DbCards" Type="Self.DbCards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbStages">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbCards">
+              <PropertyRef Name="Stage" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cards_Suits">
+          <End Role="DbSuits" Type="Self.DbSuits" Multiplicity="1" />
+          <End Role="DbCards" Type="Self.DbCards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbSuits">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbCards">
+              <PropertyRef Name="Suit" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DbCards_DbBeloteCards">
+          <End Role="DbBeloteCards" Type="Self.DbBeloteCards" Multiplicity="1" />
+          <End Role="DbCards" Type="Self.DbCards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbBeloteCards">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbCards">
+              <PropertyRef Name="BeloteCard" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DbCards_DbDealings">
+          <End Role="DbDealings" Type="Self.DbDealings" Multiplicity="1" />
+          <End Role="DbCards" Type="Self.DbCards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbDealings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DbCards">
+              <PropertyRef Name="DealingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DbDealings_DbSortOrders">
+          <End Role="DbSortOrders" Type="Self.DbSortOrders" Multiplicity="1" />
+          <End Role="DbDealings" Type="Self.DbDealings" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbSortOrders">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbDealings">
+              <PropertyRef Name="SortOrder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DbSortOrders_DbSortOrders">
+          <End Role="DbSortOrders" Type="Self.DbSortOrders" Multiplicity="1" />
+          <End Role="DbSortOrders1" Type="Self.DbSortOrders" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="DbSortOrders">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbSortOrders1">
+              <PropertyRef Name="Value" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BridgeBelotModelStoreContainer">
+          <EntitySet Name="DbBeloteCards" EntityType="Self.DbBeloteCards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DbCards" EntityType="Self.DbCards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DbDealings" EntityType="Self.DbDealings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DbSides" EntityType="Self.DbSides" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DbSortOrders" EntityType="Self.DbSortOrders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DbStages" EntityType="Self.DbStages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DbSuits" EntityType="Self.DbSuits" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Cards_Sides" Association="Self.FK_Cards_Sides">
+            <End Role="DbSides" EntitySet="DbSides" />
+            <End Role="DbCards" EntitySet="DbCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cards_Stages" Association="Self.FK_Cards_Stages">
+            <End Role="DbStages" EntitySet="DbStages" />
+            <End Role="DbCards" EntitySet="DbCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cards_Suits" Association="Self.FK_Cards_Suits">
+            <End Role="DbSuits" EntitySet="DbSuits" />
+            <End Role="DbCards" EntitySet="DbCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DbCards_DbBeloteCards" Association="Self.FK_DbCards_DbBeloteCards">
+            <End Role="DbBeloteCards" EntitySet="DbBeloteCards" />
+            <End Role="DbCards" EntitySet="DbCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DbCards_DbDealings" Association="Self.FK_DbCards_DbDealings">
+            <End Role="DbDealings" EntitySet="DbDealings" />
+            <End Role="DbCards" EntitySet="DbCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DbDealings_DbSortOrders" Association="Self.FK_DbDealings_DbSortOrders">
+            <End Role="DbSortOrders" EntitySet="DbSortOrders" />
+            <End Role="DbDealings" EntitySet="DbDealings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DbSortOrders_DbSortOrders" Association="Self.FK_DbSortOrders_DbSortOrders">
+            <End Role="DbSortOrders" EntitySet="DbSortOrders" />
+            <End Role="DbSortOrders1" EntitySet="DbSortOrders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BridgeBelotModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DbBeloteCard">
+          <Key>
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DbCards" Relationship="Self.FK_Cards_BeloteCards" FromRole="DbBeloteCards" ToRole="DbCards" />
+          <Property Name="SuitSortOrder" Type="Int32" Nullable="false" />
+          <Property Name="NoTrumpSortOrder" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DbCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DealingId" Type="Int32" Nullable="false" />
+          <Property Name="Suit" Type="Int32" Nullable="false" />
+          <Property Name="Side" Type="Int32" Nullable="false" />
+          <Property Name="Stage" Type="Int32" Nullable="false" />
+          <Property Name="BeloteCard" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DbBeloteCard" Relationship="Self.FK_Cards_BeloteCards" FromRole="DbCards" ToRole="DbBeloteCards" />
+          <NavigationProperty Name="DbSide" Relationship="Self.FK_Cards_Sides" FromRole="DbCards" ToRole="DbSides" />
+          <NavigationProperty Name="DbStage" Relationship="Self.FK_Cards_Stages" FromRole="DbCards" ToRole="DbStages" />
+          <NavigationProperty Name="DbSuit" Relationship="Self.FK_Cards_Suits" FromRole="DbCards" ToRole="DbSuits" />
+          <NavigationProperty Name="DbDealing" Relationship="Self.FK_DbCards_DbDealings" FromRole="DbCards" ToRole="DbDealings" />
+          <Property Name="SequenceNo" Type="Int32" />
+          <Property Name="ShuffledSequenceNo" Type="Int32" />
+        </EntityType>
+        <EntityType Name="DbDealing">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SortOrder" Type="Int32" Nullable="false" />
+          <Property Name="TimeStamp" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="DbCards" Relationship="Self.FK_DbCards_DbDealings" FromRole="DbDealings" ToRole="DbCards" />
+          <NavigationProperty Name="DbSortOrder" Relationship="Self.FK_DbDealings_DbSortOrders" FromRole="DbDealings" ToRole="DbSortOrders" />
+        </EntityType>
+        <EntityType Name="DbSide">
+          <Key>
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DbCards" Relationship="Self.FK_Cards_Sides" FromRole="DbSides" ToRole="DbCards" />
+        </EntityType>
+        <EntityType Name="DbSortOrder">
+          <Key>
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DbDealings" Relationship="Self.FK_DbDealings_DbSortOrders" FromRole="DbSortOrders" ToRole="DbDealings" />
+          <NavigationProperty Name="DbSortOrders1" Relationship="Self.FK_DbSortOrders_DbSortOrders" FromRole="DbSortOrders" ToRole="DbSortOrders1" />
+          <NavigationProperty Name="DbSortOrder1" Relationship="Self.FK_DbSortOrders_DbSortOrders" FromRole="DbSortOrders1" ToRole="DbSortOrders" />
+        </EntityType>
+        <EntityType Name="DbStage">
+          <Key>
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DbCards" Relationship="Self.FK_Cards_Stages" FromRole="DbStages" ToRole="DbCards" />
+        </EntityType>
+        <EntityType Name="DbSuit">
+          <Key>
+            <PropertyRef Name="Value" />
+          </Key>
+          <Property Name="Value" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DbCards" Relationship="Self.FK_Cards_Suits" FromRole="DbSuits" ToRole="DbCards" />
+        </EntityType>
+        <Association Name="FK_Cards_BeloteCards">
+          <End Role="DbBeloteCards" Type="Self.DbBeloteCard" Multiplicity="1" />
+          <End Role="DbCards" Type="Self.DbCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbBeloteCards">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbCards">
+              <PropertyRef Name="BeloteCard" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cards_Sides">
+          <End Role="DbSides" Type="Self.DbSide" Multiplicity="1" />
+          <End Role="DbCards" Type="Self.DbCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbSides">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbCards">
+              <PropertyRef Name="Side" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cards_Stages">
+          <End Role="DbStages" Type="Self.DbStage" Multiplicity="1" />
+          <End Role="DbCards" Type="Self.DbCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbStages">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbCards">
+              <PropertyRef Name="Stage" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cards_Suits">
+          <End Role="DbSuits" Type="Self.DbSuit" Multiplicity="1" />
+          <End Role="DbCards" Type="Self.DbCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbSuits">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbCards">
+              <PropertyRef Name="Suit" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DbCards_DbDealings">
+          <End Role="DbDealings" Type="Self.DbDealing" Multiplicity="1" />
+          <End Role="DbCards" Type="Self.DbCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbDealings">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DbCards">
+              <PropertyRef Name="DealingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DbDealings_DbSortOrders">
+          <End Role="DbSortOrders" Type="Self.DbSortOrder" Multiplicity="1" />
+          <End Role="DbDealings" Type="Self.DbDealing" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DbSortOrders">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbDealings">
+              <PropertyRef Name="SortOrder" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DbSortOrders_DbSortOrders">
+          <End Role="DbSortOrders" Type="Self.DbSortOrder" Multiplicity="1" />
+          <End Role="DbSortOrders1" Type="Self.DbSortOrder" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="DbSortOrders">
+              <PropertyRef Name="Value" />
+            </Principal>
+            <Dependent Role="DbSortOrders1">
+              <PropertyRef Name="Value" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BridgeBelotEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DbBeloteCards" EntityType="Self.DbBeloteCard" />
+          <EntitySet Name="DbCards" EntityType="Self.DbCard" />
+          <EntitySet Name="DbDealings" EntityType="Self.DbDealing" />
+          <EntitySet Name="DbSides" EntityType="Self.DbSide" />
+          <EntitySet Name="DbSortOrders" EntityType="Self.DbSortOrder" />
+          <EntitySet Name="DbStages" EntityType="Self.DbStage" />
+          <EntitySet Name="DbSuits" EntityType="Self.DbSuit" />
+          <AssociationSet Name="FK_Cards_BeloteCards" Association="Self.FK_Cards_BeloteCards">
+            <End Role="DbBeloteCards" EntitySet="DbBeloteCards" />
+            <End Role="DbCards" EntitySet="DbCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cards_Sides" Association="Self.FK_Cards_Sides">
+            <End Role="DbSides" EntitySet="DbSides" />
+            <End Role="DbCards" EntitySet="DbCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cards_Stages" Association="Self.FK_Cards_Stages">
+            <End Role="DbStages" EntitySet="DbStages" />
+            <End Role="DbCards" EntitySet="DbCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cards_Suits" Association="Self.FK_Cards_Suits">
+            <End Role="DbSuits" EntitySet="DbSuits" />
+            <End Role="DbCards" EntitySet="DbCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DbCards_DbDealings" Association="Self.FK_DbCards_DbDealings">
+            <End Role="DbDealings" EntitySet="DbDealings" />
+            <End Role="DbCards" EntitySet="DbCards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DbDealings_DbSortOrders" Association="Self.FK_DbDealings_DbSortOrders">
+            <End Role="DbSortOrders" EntitySet="DbSortOrders" />
+            <End Role="DbDealings" EntitySet="DbDealings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DbSortOrders_DbSortOrders" Association="Self.FK_DbSortOrders_DbSortOrders">
+            <End Role="DbSortOrders" EntitySet="DbSortOrders" />
+            <End Role="DbSortOrders1" EntitySet="DbSortOrders" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BridgeBelotModelStoreContainer" CdmEntityContainer="BridgeBelotEntities">
+          <EntitySetMapping Name="DbBeloteCards">
+            <EntityTypeMapping TypeName="BridgeBelotModel.DbBeloteCard">
+              <MappingFragment StoreEntitySet="DbBeloteCards">
+                <ScalarProperty Name="NoTrumpSortOrder" ColumnName="NoTrumpSortOrder" />
+                <ScalarProperty Name="SuitSortOrder" ColumnName="SuitSortOrder" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DbCards">
+            <EntityTypeMapping TypeName="BridgeBelotModel.DbCard">
+              <MappingFragment StoreEntitySet="DbCards">
+                <ScalarProperty Name="ShuffledSequenceNo" ColumnName="ShuffledSequenceNo" />
+                <ScalarProperty Name="SequenceNo" ColumnName="SequenceNo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DealingId" ColumnName="DealingId" />
+                <ScalarProperty Name="Suit" ColumnName="Suit" />
+                <ScalarProperty Name="Side" ColumnName="Side" />
+                <ScalarProperty Name="Stage" ColumnName="Stage" />
+                <ScalarProperty Name="BeloteCard" ColumnName="BeloteCard" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DbDealings">
+            <EntityTypeMapping TypeName="BridgeBelotModel.DbDealing">
+              <MappingFragment StoreEntitySet="DbDealings">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="TimeStamp" ColumnName="TimeStamp" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DbSides">
+            <EntityTypeMapping TypeName="BridgeBelotModel.DbSide">
+              <MappingFragment StoreEntitySet="DbSides">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DbSortOrders">
+            <EntityTypeMapping TypeName="BridgeBelotModel.DbSortOrder">
+              <MappingFragment StoreEntitySet="DbSortOrders">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DbStages">
+            <EntityTypeMapping TypeName="BridgeBelotModel.DbStage">
+              <MappingFragment StoreEntitySet="DbStages">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DbSuits">
+            <EntityTypeMapping TypeName="BridgeBelotModel.DbSuit">
+              <MappingFragment StoreEntitySet="DbSuits">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
