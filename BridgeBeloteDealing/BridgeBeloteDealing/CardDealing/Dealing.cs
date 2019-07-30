@@ -16,6 +16,7 @@
 
         public Dealing()
         {
+            // Note: required for serialisation
         }
 
         public Dealing(SortOrders sortOrders, int sequenceNo, int shuffledSequenceNo, Sides dealingSide)

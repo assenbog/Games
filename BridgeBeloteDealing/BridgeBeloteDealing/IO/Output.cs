@@ -61,6 +61,8 @@
                 var serialiser = new XmlSerializer(typeof(List<Dealing>));
 
                 serialiser.Serialize(fs, dealings);
+
+                Console.WriteLine($"\n\nDealing data saved as \"{fullFileName}\"");
             }
             catch (Exception e)
             {

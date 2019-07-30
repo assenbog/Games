@@ -1,6 +1,7 @@
 ﻿namespace BridgeBeloteDealing.CardDealing
 {
     using System;
+    using System.Xml.Serialization;
 
     [Serializable]
     public class Card
@@ -13,6 +14,7 @@
 
         public BeloteCards BelotCard { get; set; }
 
+        [XmlIgnore]
         public int RandomSequence { get; set; }
     }
 }
