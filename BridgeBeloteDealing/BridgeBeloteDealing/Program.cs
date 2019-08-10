@@ -95,8 +95,6 @@
                     continue;
                 }
 
-                dealings.Add(dealing);
-
                 // Note: No shuffled sequence numbers in the initial dealings set
                 var formattedOutput = output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealing.SequenceNo, default, dealingSide);
 
@@ -112,6 +110,8 @@
                 {
                     continue;
                 }
+
+                dealings.Add(dealing);
 
                 dealingSide = (Sides)(((int)dealingSide + 1) % 4);
 
