@@ -12,6 +12,7 @@
     {
         private Application _excel;
         private IRibbonUI _thisRibbon;
+        private ExcelController _excelController;
 
         public override string GetCustomUI(string ribbonId)
         {
@@ -41,12 +42,7 @@
 
         public void OnLoad(IRibbonUI ribbon)
         {
-            if (ribbon == null)
-            {
-                throw new ArgumentNullException(nameof(ribbon));
-            }
-
-            _thisRibbon = ribbon;
+            _thisRibbon = ribbon ?? throw new ArgumentNullException(nameof(ribbon));
 
             _excel.WorkbookActivateEvent += OnInvalidateRibbon;
             _excel.WorkbookDeactivateEvent += OnInvalidateRibbon;
@@ -57,22 +53,20 @@
             {
                 _excel.Workbooks.Add();
             }
+
+            _excelController = ExcelController.Instance;
+            _excelController.RibbonUI = ribbon;
+            _excelController.ExcelApplication = _excel;
         }
 
         public void OnLoadDealings(IRibbonControl control)
         {
-            using (var controller = new ExcelController(_excel, _thisRibbon))
-            {
-                controller.PressMe();
-            }
+            _excelController.LoadDealings();
         }
 
         public void OnMapResults(IRibbonControl control)
         {
-            using (var controller = new ExcelController(_excel, _thisRibbon))
-            {
-                controller.PressMe();
-            }
+            _excelController.PressMe();
         }
 
         private void OnInvalidateRibbon(object obj)
