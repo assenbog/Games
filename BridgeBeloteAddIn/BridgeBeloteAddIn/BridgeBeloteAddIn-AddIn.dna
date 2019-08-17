@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DnaLibrary Name="BridgeBeloteAddIn Add-In" RuntimeVersion="v4.0" xmlns="http://schemas.excel-dna.net/addin/2018/05/dnalibrary">
   <ExternalLibrary Path="BridgeBeloteAddIn.dll" ExplicitExports="false" LoadFromBytes="true" Pack="true" IncludePdb="false" />
+  
+  <Reference Path="BridgeBeloteLogic.dll" Pack="true" />
+  <Reference Path="EntityFramework.dll" Pack="true" />
+  <Reference Path="ExcelApi.dll" Pack="true" />
+  <Reference Path="NetOffice.dll" Pack="true" />
+  <Reference Path="OfficeApi.dll" Pack="true" />
+  <Reference Path="stdole.dll" Pack="true" />
+  <Reference Path="VBIDEApi.dll" Pack="true" />
 
   <!--
        The RuntimeVersion attribute above allows two settings:
