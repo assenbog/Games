@@ -109,12 +109,13 @@
         public string FormattedHtmlOutput(List<string> dealing)
         {
             var sb = new StringBuilder("<html>\n");
+            sb.Append("<style> body{ font-family:Courier New } </style>");
             sb.Append("<body>");
             foreach (var row in dealing)
             {
-                sb.Append("<p><tt>");
-                sb.Append(row.Replace("\u2666", "<font color=\"red\">\u2666</font>").Replace("\u2666", "<font color=\"red\">\u2665</font>"));
-                sb.Append("</tt></p>");
+                sb.Append("<p>");
+                sb.Append(row.Replace(" ", "&nbsp;").Replace("\u2666", "<font color=\"red\">\u2666</font>").Replace("\u2665", "<font color=\"red\">\u2665</font>"));
+                sb.Append("</p>");
             }
             sb.Append("</body>");
 
