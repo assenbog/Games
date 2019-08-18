@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DealingViewer));
             this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
@@ -46,11 +47,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1680, 1068);
             this.Controls.Add(this.webBrowser);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DealingViewer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DealingViewer";
+            this.Text = "Dealing Viewer";
             this.ResumeLayout(false);
 
         }
