@@ -41,10 +41,8 @@
 
         public int ShuffledSequenceNo { get; set; }
 
-        [XmlIgnore]
         public List<List<Card>> Initial5CardsDealt { get; set; }
 
-        [XmlIgnore]
         public List<List<Card>> Additional3CardsDealt { get; set; }
 
         public List<List<Card>> AllCardsDealt { get; set; }

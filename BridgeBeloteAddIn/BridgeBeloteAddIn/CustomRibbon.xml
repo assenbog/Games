@@ -5,7 +5,7 @@
       <tab id="BridgeBeloteTab" label="Bridge Belote Menu">
         <group id="BridgeBeloteGroup" label="Bridge Belote">
           <button id="LoadDealings" label="Load Dealings" imageMso="AssignTask" size="large" onAction="OnLoadDealings" />
-          <button id="MapResults" label="Map Results" imageMso="AdpManageIndexes" size="large" onAction="OnMapResults" />
+          <button id="ResultsComparison" label="Results Comparison" imageMso="AdpManageIndexes" size="large" onAction="OnResultsComparison" />
         </group>
       </tab>
     </tabs>

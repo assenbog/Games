@@ -18,7 +18,7 @@
         {
             const string dataFolderName = "BelotCardDealing";
 
-            var executingAssemblyName = Assembly.GetEntryAssembly().Location;
+            var executingAssemblyName = Assembly.GetExecutingAssembly().Location;
             var executingAssemblyPath = Path.GetDirectoryName(executingAssemblyName);
             var now = DateTime.Now;
             var fullDataFolder = Path.Combine(executingAssemblyPath ?? string.Empty, dataFolderName);
@@ -106,7 +106,22 @@
             };
         }
 
-        private List<string> SideOutput(List<Card> initial5CardDealt, List<Card> additional3CardDealt, bool isDealing)
+        public string FormattedHtmlOutput(List<string> dealing)
+        {
+            var sb = new StringBuilder("<html>\n");
+            sb.Append("<body>");
+            foreach (var row in dealing)
+            {
+                sb.Append("<p><tt>");
+                sb.Append(row.Replace("\u2666", "<font color=\"red\">\u2666</font>").Replace("\u2666", "<font color=\"red\">\u2665</font>"));
+                sb.Append("</tt></p>");
+            }
+            sb.Append("</body>");
+
+            return sb.ToString();
+        }
+
+            private List<string> SideOutput(List<Card> initial5CardDealt, List<Card> additional3CardDealt, bool isDealing)
         {
             const int fiveThreesOffset = 3;
 

@@ -54,6 +54,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -67,8 +68,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddIn.cs" />
     <Compile Include="CustomRibbon.cs" />
+    <Compile Include="DealingViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DealingViewer.Designer.cs">
+      <DependentUpon>DealingViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExcelController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -81,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CustomRibbon.xml" />
+    <EmbeddedResource Include="DealingViewer.resx">
+      <DependentUpon>DealingViewer.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BridgeBeloteDealing\BridgeBeloteLogic\BridgeBeloteLogic.csproj">

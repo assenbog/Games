@@ -64,9 +64,9 @@
             _excelController.LoadDealings();
         }
 
-        public void OnMapResults(IRibbonControl control)
+        public void OnResultsComparison(IRibbonControl control)
         {
-            _excelController.PressMe();
+            _excelController.ResultsComparison();
         }
 
         private void OnInvalidateRibbon(object obj)
