@@ -10,6 +10,7 @@
     using System.Linq;
     using System.Windows.Forms;
     using Application = NetOffice.ExcelApi.Application;
+    using System.Text.RegularExpressions;
 
     public sealed class ExcelController : IDisposable
     {
@@ -37,6 +38,8 @@
                 return _instance;
             }
         }
+
+        public Worksheet ResultsComparisonWorksheet { get; private set; }
 
         public List<Dealing> Dealings { get; private set; }
 
@@ -89,24 +92,24 @@
             var dropDownsWorksheet = (Worksheet)ExcelApplication.ActiveWorkbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(dropDowns, StringComparison.InvariantCultureIgnoreCase));
 
             // [Re]Create the "Results Comparison" worksheet
-            var resultsComparisonWorksheet = (Worksheet)ExcelApplication.ActiveWorkbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(resultsComparison, StringComparison.InvariantCultureIgnoreCase));
-            if (resultsComparisonWorksheet != null)
+            ResultsComparisonWorksheet = (Worksheet)ExcelApplication.ActiveWorkbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(resultsComparison, StringComparison.InvariantCultureIgnoreCase));
+            if (ResultsComparisonWorksheet != null)
             {
-                resultsComparisonWorksheet.Delete();
+                ResultsComparisonWorksheet.Delete();
             }
 
             // Add the comparison Worksheet after the BridgeBelote one
-            resultsComparisonWorksheet = (Worksheet)ExcelApplication.ActiveWorkbook.Worksheets.Add(dropDownsWorksheet);
-            resultsComparisonWorksheet.Name = resultsComparison;
+            ResultsComparisonWorksheet = (Worksheet)ExcelApplication.ActiveWorkbook.Worksheets.Add(dropDownsWorksheet);
+            ResultsComparisonWorksheet.Name = resultsComparison;
 
-            resultsComparisonWorksheet.SelectionChangeEvent += OnSelectionChange;
+            ResultsComparisonWorksheet.SelectionChangeEvent += OnSelectionChange;
 
             // Copy the headings rows
             var sourceHeadingsRange = resultsWorksheet.Range("A1:O2") as Range;
             sourceHeadingsRange.Copy();
 
             // Target headings range
-            var targetHeadingsRange = resultsComparisonWorksheet.Range("A1:O2");
+            var targetHeadingsRange = ResultsComparisonWorksheet.Range("A1:O2");
 
             // Copy the formatting
             targetHeadingsRange.PasteSpecial(XlPasteType.xlPasteFormats);
@@ -116,7 +119,7 @@
             // Make sure columns in source and target are of the same width
             for (var i = 1; i <= 15; i++)
             {
-                resultsComparisonWorksheet.Columns[i].ColumnWidth = resultsWorksheet.Columns[i].ColumnWidth;
+                ResultsComparisonWorksheet.Columns[i].ColumnWidth = resultsWorksheet.Columns[i].ColumnWidth;
             }
 
             var targetRowIndex = 3;
@@ -129,8 +132,8 @@
                 var firstRowSourceRange = resultsWorksheet.Range($"A{firstRowSourceIndex}:O{firstRowSourceIndex}");
                 var secondRowSourceRange = resultsWorksheet.Range($"A{secondRowSourceIndex}:O{secondRowSourceIndex}");
 
-                var firstRowTargetRange = resultsComparisonWorksheet.Range($"A{targetRowIndex}:O{targetRowIndex}");
-                var secondRowTargetRange = resultsComparisonWorksheet.Range($"A{targetRowIndex + 1}:O{targetRowIndex + 1}");
+                var firstRowTargetRange = ResultsComparisonWorksheet.Range($"A{targetRowIndex}:O{targetRowIndex}");
+                var secondRowTargetRange = ResultsComparisonWorksheet.Range($"A{targetRowIndex + 1}:O{targetRowIndex + 1}");
 
                 firstRowTargetRange.Value = firstRowSourceRange.Value;
                 secondRowTargetRange.Value = secondRowSourceRange.Value;
@@ -142,7 +145,16 @@
 
         private void OnSelectionChange(Range Target)
         {
-            if (Target.Address.StartsWith("$A") && Target.Value != null && int.TryParse(Target.Value.ToString(), out int index))
+            Range sequenceRange = null;
+
+            var match = Regex.Match(Target.Address, @"\$(\d+):\$(\d+)");
+
+            if(match.Success && match.Groups[1].Value == match.Groups[2].Value)
+            {
+                sequenceRange = ResultsComparisonWorksheet.Range($"A{match.Groups[1].Value}:A{match.Groups[1].Value}");
+            }
+
+            if (sequenceRange != null && sequenceRange.Value != null && int.TryParse(sequenceRange.Value.ToString(), out int index))
             {
                 // We are interested in the double clicking where we have either the original or the shuffled sequence number
                 var dealing = Dealings.FirstOrDefault(p => p.SequenceNo == index || p.ShuffledSequenceNo == index);
