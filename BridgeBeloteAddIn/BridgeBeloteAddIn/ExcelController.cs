@@ -99,7 +99,7 @@
             resultsComparisonWorksheet = (Worksheet)ExcelApplication.ActiveWorkbook.Worksheets.Add(dropDownsWorksheet);
             resultsComparisonWorksheet.Name = resultsComparison;
 
-            resultsComparisonWorksheet.BeforeDoubleClickEvent += OnResultsComparisonWorksheetDoubleClick;
+            resultsComparisonWorksheet.SelectionChangeEvent += OnSelectionChange;
 
             // Copy the headings rows
             var sourceHeadingsRange = resultsWorksheet.Range("A1:O2") as Range;
@@ -140,13 +140,13 @@
             }
         }
 
-        private void OnResultsComparisonWorksheetDoubleClick(Range Target, ref bool Cancel)
+        private void OnSelectionChange(Range Target)
         {
-            if(Target.Address.StartsWith("$A") && Target.Value != null && int.TryParse(Target.Value.ToString(), out int index))
+            if (Target.Address.StartsWith("$A") && Target.Value != null && int.TryParse(Target.Value.ToString(), out int index))
             {
                 // We are interested in the double clicking where we have either the original or the shuffled sequence number
                 var dealing = Dealings.FirstOrDefault(p => p.SequenceNo == index || p.ShuffledSequenceNo == index);
-                if(dealing != null)
+                if (dealing != null)
                 {
                     var output = new Output();
                     var formattedOutput = output.FormattedOutput(dealing.Initial5CardsDealt, dealing.Additional3CardsDealt, dealing.SequenceNo, dealing.ShuffledSequenceNo, dealing.DealingSide);
@@ -156,7 +156,6 @@
                     dealingViewer.ShowDialog();
                 }
             }
-            Cancel = true;
         }
 
         public void Dispose()
