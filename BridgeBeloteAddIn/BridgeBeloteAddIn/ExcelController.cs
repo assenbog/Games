@@ -16,8 +16,6 @@
         private static readonly object _padlock = new object();
         private static ExcelController _instance = null;
 
-        private List<Dealing> _dealings = null;
-
         private ExcelController()
         {
         }
@@ -39,6 +37,9 @@
                 return _instance;
             }
         }
+
+        public List<Dealing> Dealings { get; private set; }
+
         public Application ExcelApplication { get; set; }
 
         public IRibbonUI RibbonUI { get; set; }
@@ -58,7 +59,7 @@
 
                     var input = new Input();
 
-                    _dealings = input.DeserialiseFromXml(filePath);
+                    Dealings = input.DeserialiseFromXml(filePath);
                 }
             }
         }
@@ -69,7 +70,7 @@
             const string resultsComparison = "Results Comparison";
             const string dropDowns = "DropDowns";
 
-            if(_dealings == null)
+            if(Dealings == null)
             {
                 // No Dealings loaded
                 MessageBox.Show("Please load Dealings before proceeding", "Bridge Belote", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -120,7 +121,7 @@
 
             var targetRowIndex = 3;
 
-            foreach (var dealing in _dealings)
+            foreach (var dealing in Dealings)
             {
                 var firstRowSourceIndex = dealing.SequenceNo + 2;
                 var secondRowSourceIndex = dealing.ShuffledSequenceNo + 3;
@@ -144,7 +145,7 @@
             if(Target.Address.StartsWith("$A") && Target.Value != null && int.TryParse(Target.Value.ToString(), out int index))
             {
                 // We are interested in the double clicking where we have either the original or the shuffled sequence number
-                var dealing = _dealings.FirstOrDefault(p => p.SequenceNo == index || p.ShuffledSequenceNo == index);
+                var dealing = Dealings.FirstOrDefault(p => p.SequenceNo == index || p.ShuffledSequenceNo == index);
                 if(dealing != null)
                 {
                     var output = new Output();
