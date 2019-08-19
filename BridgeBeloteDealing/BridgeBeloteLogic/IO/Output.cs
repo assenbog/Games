@@ -124,7 +124,7 @@
             return sb.ToString();
         }
 
-            private List<string> SideOutput(List<Card> initial5CardDealt, List<Card> additional3CardDealt, bool isDealing)
+        private List<string> SideOutput(List<Card> initial5CardDealt, List<Card> additional3CardDealt, bool isDealing)
         {
             const int fiveThreesOffset = 3;
 
