@@ -152,7 +152,7 @@
 
             if(match.Success && match.Groups[1].Value == match.Groups[2].Value)
             {
-                // Both group values should provide the row number which we'll use to get the "A" row only range 
+                // Both group values should provide the row number which we'll use to get the "A" column only range 
                 sequenceRange = ResultsComparisonWorksheet.Range($"A{match.Groups[1].Value}:A{match.Groups[1].Value}");
             }
 
