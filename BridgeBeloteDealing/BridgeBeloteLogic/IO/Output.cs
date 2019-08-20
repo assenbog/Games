@@ -14,21 +14,13 @@
     {
         private string fileNameWithoutExt;
 
-        public Output()
+        // Note: When instantiated from the Excel AddIn we'll pass in false, as we can't get the Assembly info from Excel and we don't need the output functionality anyway
+        public Output(bool initialiseFileName = true)
         {
-            const string dataFolderName = "BelotCardDealing";
-
-            var executingAssemblyName = Assembly.GetExecutingAssembly().Location;
-            var executingAssemblyPath = Path.GetDirectoryName(executingAssemblyName);
-            var now = DateTime.Now;
-            var fullDataFolder = Path.Combine(executingAssemblyPath ?? string.Empty, dataFolderName);
-            if (!Directory.Exists(fullDataFolder))
+            if(initialiseFileName)
             {
-                Directory.CreateDirectory(fullDataFolder);
+                InitialiseFileName();
             }
-            var dateTimeStamp = now.ToString("dd MMM yyyy HH_mm");
-            var fileName = $"{dataFolderName} {dateTimeStamp}.";
-            fileNameWithoutExt = Path.Combine(fullDataFolder, fileName);
         }
 
         public void SaveDealResults(List<string> output)
@@ -123,6 +115,24 @@
 
             return sb.ToString();
         }
+
+        private void InitialiseFileName()
+        {
+            const string dataFolderName = "BelotCardDealing";
+
+            var executingAssemblyName = Assembly.GetExecutingAssembly().Location;
+            var executingAssemblyPath = Path.GetDirectoryName(executingAssemblyName);
+            var now = DateTime.Now;
+            var fullDataFolder = Path.Combine(executingAssemblyPath ?? string.Empty, dataFolderName);
+            if (!Directory.Exists(fullDataFolder))
+            {
+                Directory.CreateDirectory(fullDataFolder);
+            }
+            var dateTimeStamp = now.ToString("dd MMM yyyy HH_mm");
+            var fileName = $"{dataFolderName} {dateTimeStamp}.";
+            fileNameWithoutExt = Path.Combine(fullDataFolder, fileName);
+        }
+
 
         private List<string> SideOutput(List<Card> initial5CardDealt, List<Card> additional3CardDealt, bool isDealing)
         {

@@ -73,7 +73,9 @@
             const string resultsComparison = "Results Comparison";
             const string dropDowns = "DropDowns";
 
-            if(Dealings == null)
+            ExcelApplication.EnableEvents = true;
+
+            if (Dealings == null)
             {
                 // No Dealings loaded
                 MessageBox.Show("Please load Dealings before proceeding", "Bridge Belote", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -162,7 +164,7 @@
                 var dealing = Dealings.FirstOrDefault(p => p.SequenceNo == index || p.ShuffledSequenceNo == index);
                 if (dealing != null)
                 {
-                    var output = new Output();
+                    var output = new Output(false);
                     var formattedOutput = output.FormattedOutput(dealing.Initial5CardsDealt, dealing.Additional3CardsDealt, dealing.SequenceNo, dealing.ShuffledSequenceNo, dealing.DealingSide);
                     var htmlOutput = output.FormattedHtmlOutput(formattedOutput);
 
