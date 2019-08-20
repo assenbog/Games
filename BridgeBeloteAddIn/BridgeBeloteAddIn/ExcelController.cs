@@ -147,10 +147,12 @@
         {
             Range sequenceRange = null;
 
+            // Note: When an entire row is selected, e.g. row 15, the Address is of the format "$15:$15"
             var match = Regex.Match(Target.Address, @"\$(\d+):\$(\d+)");
 
             if(match.Success && match.Groups[1].Value == match.Groups[2].Value)
             {
+                // Both group values should provide the row number which we'll use to get the "A" row only range 
                 sequenceRange = ResultsComparisonWorksheet.Range($"A{match.Groups[1].Value}:A{match.Groups[1].Value}");
             }
 
