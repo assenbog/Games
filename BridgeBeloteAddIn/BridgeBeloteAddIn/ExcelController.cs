@@ -73,6 +73,11 @@
             const string resultsComparison = "Results Comparison";
             const string dropDowns = "DropDowns";
 
+            const int redDifferenceColumnIndex = 12;
+            const int blueDifferenceColumnIndex = 13;
+            const int redWinningPointsColumnIndex = 14;
+            const int blueWinningPointsColumnIndex = 15;
+
             ExcelApplication.EnableEvents = true;
 
             if (Dealings == null)
@@ -139,6 +144,25 @@
 
                 firstRowTargetRange.Value = firstRowSourceRange.Value;
                 secondRowTargetRange.Value = secondRowSourceRange.Value;
+
+                // Победни точки
+                int.TryParse(((object[,])firstRowTargetRange.Value)[1, redDifferenceColumnIndex]?.ToString() ?? "0", out int firstRowRedDifference);
+                int.TryParse(((object[,])firstRowTargetRange.Value)[1, blueDifferenceColumnIndex]?.ToString() ?? "0", out int firstRowBlueDifference);
+                int.TryParse(((object[,])secondRowTargetRange.Value)[1, redDifferenceColumnIndex]?.ToString() ?? "0", out int secondRowRedDifference);
+                int.TryParse(((object[,])secondRowTargetRange.Value)[1, blueDifferenceColumnIndex]?.ToString() ?? "0", out int secondRowBlueDifference);
+
+                var redDifference = firstRowRedDifference + secondRowRedDifference;
+                var blueDifference = firstRowBlueDifference + secondRowBlueDifference;
+
+                if(redDifference > blueDifference)
+                {
+                    ((object[,])firstRowTargetRange.Value)[1, redWinningPointsColumnIndex] = redDifference - blueDifference;
+                }
+
+                else if (redDifference < blueDifference)
+                {
+                    ((object[,])secondRowTargetRange.Value)[1, blueWinningPointsColumnIndex] = blueDifference - redDifference;
+                }
 
                 // Space out each 2 rows with an empty one
                 targetRowIndex += 3;
