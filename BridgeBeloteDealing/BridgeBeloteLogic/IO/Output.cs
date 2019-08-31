@@ -102,14 +102,14 @@
         {
             var sb = new StringBuilder("<html>\n");
             // Select a fixed width font for the document
-            sb.Append("<style> body{ font-family:Courier New } </style>");
+            sb.Append("<style> body{ font-family:Courier New; LINE-HEIGHT:5px; } </style>");
             sb.Append("<body>");
             foreach (var row in dealing)
             {
-                sb.Append("<p>");
+                sb.Append("<p><small>");
                 // Unless we replace spaces with non breaking spaces, the rows don't get properly spaced out
                 sb.Append(row.Replace(" ", "&nbsp;").Replace("\u2666", "<font color=\"red\">\u2666</font>").Replace("\u2665", "<font color=\"red\">\u2665</font>"));
-                sb.Append("</p>");
+                sb.Append("</small></p>");
             }
             sb.Append("</body>");
 
