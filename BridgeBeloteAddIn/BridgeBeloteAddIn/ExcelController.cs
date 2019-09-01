@@ -17,6 +17,8 @@
         private static readonly object _padlock = new object();
         private static ExcelController _instance = null;
 
+        private int secondSetStartIndex = 0;
+
         private ExcelController()
         {
         }
@@ -41,61 +43,115 @@
 
         public Worksheet ResultsComparisonWorksheet { get; private set; }
 
-        public List<Dealing> Dealings { get; private set; }
+        public List<Dealing> Dealings1 { get; private set; }
+
+        public List<Dealing> Dealings2 { get; private set; }
 
         public Application ExcelApplication { get; set; }
 
         public IRibbonUI RibbonUI { get; set; }
 
-        public void LoadDealings()
+        // Note: set is either 1 or 2
+        public void LoadDealings(int set)
         {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            if(set == 1 && Dealings1 != null)
             {
-                openFileDialog.InitialDirectory = "c:\\";
-                openFileDialog.Filter = "XML files (*.xml)|*.xml";
-                openFileDialog.RestoreDirectory = true;
-
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                var reply = MessageBox.Show("Dealings1 have already been loaded. Would you like to reload them?", "Load Dealings", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3);
+                if(reply != DialogResult.Yes)
                 {
-                    //Get the path of specified file
-                    var filePath = openFileDialog.FileName;
-
-                    var input = new Input();
-
-                    Dealings = input.DeserialiseFromXml(filePath);
+                    return;
                 }
+            }
+
+            if (set == 2 && Dealings2 != null)
+            {
+                var reply = MessageBox.Show("Dealings2 have already been loaded. Would you like to reload them?", "Load Dealings", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button3);
+                if (reply != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
+            try
+            {
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    openFileDialog.InitialDirectory = "c:\\";
+                    openFileDialog.Filter = "XML files (*.xml)|*.xml";
+                    openFileDialog.RestoreDirectory = true;
+
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        //Get the path of specified file
+                        var filePath = openFileDialog.FileName;
+
+                        var input = new Input();
+
+                        if (set == 1)
+                        {
+                            Dealings1 = input.DeserialiseFromXml(filePath);
+                        }
+                        else if (set == 2)
+                        {
+                            Dealings2 = input.DeserialiseFromXml(filePath);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         public void ResultsComparison()
         {
-            const string results = "BridgeBelote";
+            const string results1 = "BridgeBelote1";
+            const string results2 = "BridgeBelote2";
             const string resultsComparison = "Results Comparison";
             const string dropDowns = "DropDowns";
 
-            const int redDifferenceColumnIndex = 12;
-            const int blueDifferenceColumnIndex = 13;
-            const int redWinningPointsColumnIndex = 14;
-            const int blueWinningPointsColumnIndex = 15;
-
             ExcelApplication.EnableEvents = true;
 
-            if (Dealings == null)
+            if (Dealings1 == null)
             {
                 // No Dealings loaded
-                MessageBox.Show("Please load Dealings before proceeding", "Bridge Belote", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please load Dealings1 before proceeding", "Bridge Belote", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!ExcelApplication.ActiveWorkbook.Worksheets.Any(p => ((Worksheet)p).Name.Equals(results, StringComparison.InvariantCultureIgnoreCase)))
+            if (!ExcelApplication.ActiveWorkbook.Worksheets.Any(p => ((Worksheet)p).Name.Equals(results1, StringComparison.InvariantCultureIgnoreCase)))
             {
                 // Wrong workbook
-                MessageBox.Show("Document doesn't appear to hold valid Bridge Belote results", "Bridge Belote", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Document doesn't appear to hold valid Bridge Belote results", $"{results1}", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
+            }
+
+            var reply = MessageBox.Show("Include BridgeBelote2 results in the analysis?", "Analysis", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+
+            var inludeBridgeBelote2 = reply == DialogResult.Yes;
+
+            if(inludeBridgeBelote2)
+            {
+                // Check the Dealings2 related data
+                if (Dealings2 == null)
+                {
+                    // No Dealings loaded
+                    MessageBox.Show("Please load Dealings2 before proceeding", "Bridge Belote", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!ExcelApplication.ActiveWorkbook.Worksheets.Any(p => ((Worksheet)p).Name.Equals(results2, StringComparison.InvariantCultureIgnoreCase)))
+                {
+                    // Wrong workbook
+                    MessageBox.Show("Document doesn't appear to hold valid Bridge Belote results", $"{results2}", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
 
             // Get the BridgeBelote [results] Worksheet and DropDowns. We'd like to add the new Worksheet in between the two
-            var resultsWorksheet = (Worksheet)ExcelApplication.ActiveWorkbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(results, StringComparison.InvariantCultureIgnoreCase));
+            var resultsWorksheet1 = (Worksheet)ExcelApplication.ActiveWorkbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(results1, StringComparison.InvariantCultureIgnoreCase));
+            var resultsWorksheet2 = (Worksheet)ExcelApplication.ActiveWorkbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(results2, StringComparison.InvariantCultureIgnoreCase));
             var dropDownsWorksheet = (Worksheet)ExcelApplication.ActiveWorkbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(dropDowns, StringComparison.InvariantCultureIgnoreCase));
 
             // [Re]Create the "Results Comparison" worksheet
@@ -112,7 +168,7 @@
             ResultsComparisonWorksheet.SelectionChangeEvent += OnSelectionChange;
 
             // Copy the headings rows
-            var sourceHeadingsRange = resultsWorksheet.Range("A1:O2") as Range;
+            var sourceHeadingsRange = resultsWorksheet1.Range("A1:O2") as Range;
             sourceHeadingsRange.Copy();
 
             // Target headings range
@@ -126,12 +182,28 @@
             // Make sure columns in source and target are of the same width
             for (var i = 1; i <= 15; i++)
             {
-                ResultsComparisonWorksheet.Columns[i].ColumnWidth = resultsWorksheet.Columns[i].ColumnWidth;
+                ResultsComparisonWorksheet.Columns[i].ColumnWidth = resultsWorksheet1.Columns[i].ColumnWidth;
             }
 
             var targetRowIndex = 3;
 
-            foreach (var dealing in Dealings)
+            secondSetStartIndex = MergeDealingResults(resultsWorksheet1, Dealings1, targetRowIndex);
+
+            if(inludeBridgeBelote2)
+            {
+                // Note: We have no use for the return value at this stage
+                MergeDealingResults(resultsWorksheet2, Dealings2, secondSetStartIndex);
+            }
+        }
+
+        private int MergeDealingResults(Worksheet resultsWorksheet, List<Dealing> dealings, int targetRowIndex)
+        {
+            const int redDifferenceColumnIndex = 12;
+            const int blueDifferenceColumnIndex = 13;
+            const int redWinningPointsColumnIndex = 14;
+            const int blueWinningPointsColumnIndex = 15;
+
+            foreach (var dealing in Dealings1)
             {
                 var firstRowSourceIndex = dealing.SequenceNo + 2;
                 var secondRowSourceIndex = dealing.ShuffledSequenceNo + 3;
@@ -154,7 +226,7 @@
                 var redDifference = firstRowRedDifference + secondRowRedDifference;
                 var blueDifference = firstRowBlueDifference + secondRowBlueDifference;
 
-                if(redDifference > blueDifference)
+                if (redDifference > blueDifference)
                 {
                     ((object[,])firstRowTargetRange.Value)[1, redWinningPointsColumnIndex] = redDifference - blueDifference;
                 }
@@ -167,6 +239,8 @@
                 // Space out each 2 rows with an empty one
                 targetRowIndex += 3;
             }
+
+            return targetRowIndex;
         }
 
         private void OnSelectionChange(Range Target)
@@ -185,7 +259,10 @@
             if (sequenceRange != null && sequenceRange.Value != null && int.TryParse(sequenceRange.Value.ToString(), out int index))
             {
                 // We are interested in the double clicking where we have either the original or the shuffled sequence number
-                var dealing = Dealings.FirstOrDefault(p => p.SequenceNo == index || p.ShuffledSequenceNo == index);
+                var dealing = index < secondSetStartIndex 
+                            ? Dealings1.FirstOrDefault(p => p.SequenceNo == index || p.ShuffledSequenceNo == index) 
+                            : Dealings2.FirstOrDefault(p => p.SequenceNo == index || p.ShuffledSequenceNo == index);
+
                 if (dealing != null)
                 {
                     var output = new Output(false);

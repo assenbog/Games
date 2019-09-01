@@ -93,6 +93,7 @@
     <None Include="BridgeBeloteAddIn-AddIn.dna">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Excel\BridgeBelotResultsAuto2.xltx" />
     <None Include="packages.config" />
     <None Include="Properties\ExcelDna.Build.props" />
     <None Include="Properties\Settings.settings">

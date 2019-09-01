@@ -4,7 +4,10 @@
     <tabs>
       <tab id="BridgeBeloteTab" label="Bridge Belote Menu">
         <group id="BridgeBeloteGroup" label="Bridge Belote">
-          <button id="LoadDealings" label="Load Dealings" imageMso="AssignTask" size="large" onAction="OnLoadDealings" />
+          <menu id="LoadDealings" label="Load Dealings" size="large" imageMso="AssignTask">
+            <button id="LoadDealings1" label="Load Dealings 1" imageMso="_1" onAction="OnLoadDealings1" />
+            <button id="LoadDealings2" label="Load Dealings 2" imageMso="_2" onAction="OnLoadDealings2" />
+          </menu>
           <button id="ResultsComparison" label="Results Comparison" imageMso="AdpManageIndexes" size="large" onAction="OnResultsComparison" />
         </group>
       </tab>

@@ -59,9 +59,14 @@
             _excelController.ExcelApplication = _excel;
         }
 
-        public void OnLoadDealings(IRibbonControl control)
+        public void OnLoadDealings1(IRibbonControl control)
         {
-            _excelController.LoadDealings();
+            _excelController.LoadDealings(1);
+        }
+
+        public void OnLoadDealings2(IRibbonControl control)
+        {
+            _excelController.LoadDealings(2);
         }
 
         public void OnResultsComparison(IRibbonControl control)
