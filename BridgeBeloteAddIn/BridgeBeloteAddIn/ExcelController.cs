@@ -209,7 +209,7 @@
             const int redWinningPointsColumnIndex = 14;
             const int blueWinningPointsColumnIndex = 15;
 
-            foreach (var dealing in Dealings1)
+            foreach (var dealing in dealings)
             {
                 var firstRowSourceIndex = dealing.SequenceNo + 2;
                 var secondRowSourceIndex = dealing.ShuffledSequenceNo + 3;
