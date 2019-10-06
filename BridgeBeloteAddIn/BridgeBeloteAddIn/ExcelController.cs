@@ -194,6 +194,12 @@
                 // Note: We have no use for the return value at this stage
                 MergeDealingResults(resultsWorksheet2, Dealings2, secondSetStartIndex);
             }
+
+            // Freeze the top 2 rows in the ResultsComparisonWorksheet
+            var activeWindow = ExcelApplication.ActiveWindow;
+            ExcelApplication.Goto(ResultsComparisonWorksheet.Cells[2]);
+            activeWindow.SplitRow = 2;
+            activeWindow.FreezePanes = true;
         }
 
         private int MergeDealingResults(Worksheet resultsWorksheet, List<Dealing> dealings, int targetRowIndex)
