@@ -234,12 +234,12 @@
 
                 if (redDifference > blueDifference)
                 {
-                    ((object[,])firstRowTargetRange.Value)[1, redWinningPointsColumnIndex] = redDifference - blueDifference;
+                    firstRowTargetRange[1, redWinningPointsColumnIndex].Value = redDifference - blueDifference;
                 }
 
                 else if (redDifference < blueDifference)
                 {
-                    ((object[,])secondRowTargetRange.Value)[1, blueWinningPointsColumnIndex] = blueDifference - redDifference;
+                    secondRowTargetRange[1, blueWinningPointsColumnIndex].Value = blueDifference - redDifference;
                 }
 
                 // Space out each 2 rows with an empty one
