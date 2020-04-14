@@ -201,6 +201,7 @@
             activeWindow.SplitRow = 2;
             activeWindow.FreezePanes = true;
 
+            // Both BridgeBelote1 & 2 worksheets have columns N & O hidden, as they are only relevant to the Comparison worksheet and need to be unhidden there
             var hiddenColumnRange = ResultsComparisonWorksheet.Range("N:O");
             hiddenColumnRange.Columns.Hidden = false;
         }
