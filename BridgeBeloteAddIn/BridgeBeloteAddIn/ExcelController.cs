@@ -200,6 +200,9 @@
             ExcelApplication.Goto(ResultsComparisonWorksheet.Cells[2]);
             activeWindow.SplitRow = 2;
             activeWindow.FreezePanes = true;
+
+            var hiddenColumnRange = ResultsComparisonWorksheet.Range("N:O");
+            hiddenColumnRange.Columns.Hidden = false;
         }
 
         private int MergeDealingResults(Worksheet resultsWorksheet, List<Dealing> dealings, int targetRowIndex)
