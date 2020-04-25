@@ -1,7 +1,5 @@
 ﻿namespace BridgeBeloteLogic.IO
 {
-    using BridgeBeloteLogic.CardDealing;
-    using BridgeBeloteLogic.Utilities;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -9,6 +7,8 @@
     using System.Reflection;
     using System.Text;
     using System.Xml.Serialization;
+    using BridgeBeloteLogic.CardDealing;
+    using BridgeBeloteLogic.Utilities;
 
     public class Output
     {

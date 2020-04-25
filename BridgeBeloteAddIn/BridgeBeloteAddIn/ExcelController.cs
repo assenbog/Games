@@ -1,16 +1,16 @@
 ﻿namespace BridgeBeloteAddIn
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Windows.Forms;
+    using System.Text.RegularExpressions;
     using BridgeBeloteLogic.CardDealing;
     using BridgeBeloteLogic.IO;
     using ExcelDna.Integration.CustomUI;
     using NetOffice.ExcelApi;
     using NetOffice.ExcelApi.Enums;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Windows.Forms;
     using Application = NetOffice.ExcelApi.Application;
-    using System.Text.RegularExpressions;
 
     public sealed class ExcelController : IDisposable
     {
@@ -47,6 +47,10 @@
 
         public List<Dealing> Dealings2 { get; private set; }
 
+        public string Dealings1FileName { get; private set; }
+
+        public string Dealings2FileName { get; private set; }
+
         public Application ExcelApplication { get; set; }
 
         public IRibbonUI RibbonUI { get; set; }
@@ -74,7 +78,7 @@
 
             try
             {
-                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                using (var openFileDialog = new OpenFileDialog())
                 {
                     openFileDialog.InitialDirectory = "c:\\";
                     openFileDialog.Filter = "XML files (*.xml)|*.xml";
@@ -90,10 +94,12 @@
                         if (set == 1)
                         {
                             Dealings1 = input.DeserialiseFromXml(filePath);
+                            Dealings1FileName = filePath;
                         }
                         else if (set == 2)
                         {
                             Dealings2 = input.DeserialiseFromXml(filePath);
+                            Dealings2FileName = filePath;
                         }
                     }
                 }
@@ -189,10 +195,18 @@
 
             secondSetStartIndex = MergeDealingResults(resultsWorksheet1, Dealings1, targetRowIndex);
 
-            if(inludeBridgeBelote2)
+            var dataFileRow = secondSetStartIndex;
+
+            if (inludeBridgeBelote2)
             {
                 // Note: We have no use for the return value at this stage
-                MergeDealingResults(resultsWorksheet2, Dealings2, secondSetStartIndex);
+                dataFileRow = MergeDealingResults(resultsWorksheet2, Dealings2, secondSetStartIndex);
+            }
+
+            ResultsComparisonWorksheet.Range($"A{dataFileRow}").Value = $"Dealing1 File: {Dealings1FileName}";
+            if(!string.IsNullOrEmpty(Dealings2FileName))
+            {
+                ResultsComparisonWorksheet.Range($"A{dataFileRow + 1}").Value = $"Dealing2 File: {Dealings2FileName}";
             }
 
             // Freeze the top 2 rows in the ResultsComparisonWorksheet

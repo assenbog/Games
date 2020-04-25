@@ -1,9 +1,9 @@
 ﻿namespace BridgeBeloteLogic.IO
 {
-    using BridgeBeloteLogic.CardDealing;
-    using System.Collections.Generic;
     using System.IO;
     using System.Xml.Serialization;
+    using BridgeBeloteLogic.CardDealing;
+    using System.Collections.Generic;
 
     public class Input
     {

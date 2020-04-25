@@ -1,7 +1,7 @@
 ﻿namespace BridgeBeloteAddIn
 {
-    using BridgeBeloteAddIn.Properties;
     using System.Windows.Forms;
+    using BridgeBeloteAddIn.Properties;
 
     public partial class DealingViewer : Form
     {
