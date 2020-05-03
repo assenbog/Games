@@ -284,8 +284,11 @@
                 {
                     bridgeBelote1Worksheet = (Worksheet)workbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(bridgeBelote1, StringComparison.InvariantCultureIgnoreCase));
                     var resultsComparisonWorksheet = (Worksheet)workbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(resultsComparison, StringComparison.InvariantCultureIgnoreCase));
+
                     // Check if same dealings file was used before proceeding
-                    if (resultsComparisonWorksheet.Range(_dealings1FileNameRange).Value.ToString().EndsWith(_dealings1FileName))
+                    var dealings1FileName = resultsComparisonWorksheet.Range(_dealings1FileNameRange).Value;
+                    // A null check to exclude files where the xml file info is missing, as we can't compare without it
+                    if (dealings1FileName != null && dealings1FileName.ToString().EndsWith(_dealings1FileName))
                     {
                         compareWithOtherGamesWorksheet.Range($"A{currentRow++}").Value = $"Filename: {workbook.FullName}";
                         bridgeBelote1Worksheet.Range(resultsRange).Copy();
