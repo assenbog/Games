@@ -9,6 +9,7 @@
             <button id="LoadDealings2" label="Load Dealings 2" imageMso="_2" onAction="OnLoadDealings2" />
           </menu>
           <button id="ResultsComparison" label="Results Comparison" imageMso="AdpManageIndexes" size="large" onAction="OnResultsComparison" />
+          <button id="CompareWithOtherGames" label="Compare With Other Games" imageMso="FileFind" size="large" onAction="OnCompareWithOtherGames" />
         </group>
       </tab>
     </tabs>

@@ -74,6 +74,11 @@
             _excelController.ResultsComparison();
         }
 
+        public void OnCompareWithOtherGames(IRibbonControl control)
+        {
+            _excelController.CompareWithOtherGames();
+        }
+
         private void OnInvalidateRibbon(object obj)
         {
             _thisRibbon.Invalidate();
