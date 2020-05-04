@@ -280,23 +280,30 @@
 
             foreach (var excelFile in excelFilesInActiveWorkbookFolder)
             {
-                using(var workbook = ExcelApplication.Workbooks.Open(excelFile))
+                try
                 {
-                    bridgeBelote1Worksheet = (Worksheet)workbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(bridgeBelote1, StringComparison.InvariantCultureIgnoreCase));
-                    var resultsComparisonWorksheet = (Worksheet)workbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(resultsComparison, StringComparison.InvariantCultureIgnoreCase));
-
-                    // Check if same dealings file was used before proceeding
-                    var dealings1FileName = resultsComparisonWorksheet.Range(_dealings1FileNameRange).Value;
-                    // A null check to exclude files where the xml file info is missing, as we can't compare without it
-                    if (dealings1FileName != null && dealings1FileName.ToString().EndsWith(_dealings1FileName))
+                    using (var workbook = ExcelApplication.Workbooks.Open(excelFile))
                     {
-                        compareWithOtherGamesWorksheet.Range($"A{currentRow++}").Value = $"Filename: {workbook.FullName}";
-                        bridgeBelote1Worksheet.Range(resultsRange).Copy();
-                        compareWithOtherGamesWorksheet.Range($"A{currentRow}").PasteSpecial(XlPasteType.xlPasteValues);
-                        compareWithOtherGamesWorksheet.Range($"A{currentRow}").PasteSpecial(XlPasteType.xlPasteFormats);
-                        currentRow += 4;
+                        bridgeBelote1Worksheet = (Worksheet)workbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(bridgeBelote1, StringComparison.InvariantCultureIgnoreCase));
+                        var resultsComparisonWorksheet = (Worksheet)workbook.Worksheets.FirstOrDefault(p => ((Worksheet)p).Name.Equals(resultsComparison, StringComparison.InvariantCultureIgnoreCase));
+
+                        // Check if same dealings file was used before proceeding
+                        var dealings1FileName = resultsComparisonWorksheet.Range(_dealings1FileNameRange).Value;
+                        // A null check to exclude files where the xml file info is missing, as we can't compare without it
+                        if (dealings1FileName != null && dealings1FileName.ToString().EndsWith(_dealings1FileName))
+                        {
+                            compareWithOtherGamesWorksheet.Range($"A{currentRow++}").Value = $"Filename: {workbook.FullName}";
+                            bridgeBelote1Worksheet.Range(resultsRange).Copy();
+                            compareWithOtherGamesWorksheet.Range($"A{currentRow}").PasteSpecial(XlPasteType.xlPasteValues);
+                            compareWithOtherGamesWorksheet.Range($"A{currentRow}").PasteSpecial(XlPasteType.xlPasteFormats);
+                            currentRow += 4;
+                        }
+                        workbook.Close(false);
                     }
-                    workbook.Close(false);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Unable to process \"{excelFile}\": {ex.Message}");
                 }
             }
         }
