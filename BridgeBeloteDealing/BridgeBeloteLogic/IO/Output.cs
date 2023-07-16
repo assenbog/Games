@@ -190,7 +190,7 @@
             AddAdditionalCards(additionalClubsCards, clubsStringBuilder, initialMaxLength - clubsStringBuilder.Length);
             AddAdditionalCards(additionalDiamondsCards, diamondsStringBuilder, initialMaxLength - diamondsStringBuilder.Length);
 
-            return new List<string> { spadesStringBuilder.ToString(), heartsStringBuilder.ToString(), clubsStringBuilder.ToString(), diamondsStringBuilder.ToString() }; ;
+            return new List<string> { spadesStringBuilder.ToString(), heartsStringBuilder.ToString(), diamondsStringBuilder.ToString(), clubsStringBuilder.ToString() }; ;
         }
 
         private void AddAdditionalCards(List<Card> additionalCards, StringBuilder sb, int initialAdditionalSeparator)

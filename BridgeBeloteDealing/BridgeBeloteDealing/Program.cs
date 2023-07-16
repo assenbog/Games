@@ -3,6 +3,7 @@
     using BridgeBeloteLogic.CardDealing;
     using BridgeBeloteLogic.IO;
     using BridgeBeloteLogic.IO.EF;
+    using BridgeBeloteLogic.Utilities;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -95,18 +96,43 @@
                     continue;
                 }
 
-                // Note: No shuffled sequence numbers in the initial dealings set
-                var formattedOutput = output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealing.SequenceNo, default, dealingSide);
+                var keyPress = new ConsoleKeyInfo();
 
-                Console.WriteLine($"\n\nРаздаване #{dealSequence}\n");
+                do
+                {
+                    // Note: No shuffled sequence numbers in the initial dealings set
+                    var formattedOutput = output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealing.SequenceNo, default, dealingSide);
 
-                formattedOutput.ForEach(p => Console.WriteLine(p));
+                    Console.WriteLine($"\n\nРаздаване #{dealSequence}\n");
 
-                Console.Write("\n\nEsc - Ignore, any other key - Use ... ");
+                    formattedOutput.ForEach(p => Console.WriteLine(p));
 
-                var keyPress = Console.ReadKey();
+                    var discardLast = dealSequence > 1 ? ", D - Discard last, " : string.Empty;
 
-                if(keyPress.Key == ConsoleKey.Escape)
+                    Console.Write($"\n\nEsc - Ignore, R - Rotate, {discardLast}any other key - Use ... ");
+
+                    keyPress = Console.ReadKey();
+
+                    switch (keyPress.Key)
+                    {
+                        case ConsoleKey.D:
+                            dealings.RemoveAt(dealings.Count - 1);
+                            dealSequence--;
+                            break;
+                        case ConsoleKey.Escape:
+                            break;
+                        case ConsoleKey.R:
+                            allCardsDealt = allCardsDealt.MoveFirstItemToEndOfList();
+                            initial5CardDealt = initial5CardDealt.MoveFirstItemToEndOfList();
+                            additional3CardDealt = additional3CardDealt.MoveFirstItemToEndOfList();
+                            continue;
+                        default: 
+                            break; 
+                    }
+                }
+                while (keyPress.Key == ConsoleKey.R || keyPress.Key == ConsoleKey.D);
+
+                if (keyPress.Key == ConsoleKey.Escape)
                 {
                     continue;
                 }

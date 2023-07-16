@@ -37,6 +37,8 @@
 
         public Sides DealingSide { get; set; }
 
+        public bool IncludeInFutureDealings { get; set; }
+
         public int SequenceNo { get; set; }
 
         public int ShuffledSequenceNo { get; set; }

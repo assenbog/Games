@@ -7,7 +7,8 @@ C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Debug\BridgeBeloteDe
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Debug\EntityFramework.dll
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Debug\EntityFramework.xml
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Debug\BridgeBeloteDealing.csproj.CopyComplete
-C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Debug\BridgeBeloteDealing.csprojAssemblyReference.cache
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Debug\BridgeBeloteLogic.dll
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Debug\BridgeBeloteLogic.pdb
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Debug\BridgeBeloteLogic.dll.config
+C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Debug\BridgeBeloteDealing.csproj.AssemblyReference.cache
+C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Debug\BridgeBeloteDealing.csproj.SuggestedBindingRedirects.cache

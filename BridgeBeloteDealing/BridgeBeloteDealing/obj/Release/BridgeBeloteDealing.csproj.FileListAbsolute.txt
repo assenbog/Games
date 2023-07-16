@@ -4,10 +4,11 @@ C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\BridgeBelote
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.csproj.CoreCompileInputs.cache
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.exe
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.pdb
-C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.csprojAssemblyReference.cache
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\BridgeBeloteLogic.dll
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\EntityFramework.dll
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\BridgeBeloteLogic.pdb
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\BridgeBeloteLogic.dll.config
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\EntityFramework.xml
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.csproj.CopyComplete
+C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.csproj.AssemblyReference.cache
+C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.csproj.SuggestedBindingRedirects.cache
