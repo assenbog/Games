@@ -7,6 +7,7 @@
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.IO;
     using System.Linq;
     using System.Text;
 
@@ -65,6 +66,25 @@
             var shuffledSequenceNos = ShuffledSequenceNos(maxDealCountValue);
 
             var output = new Output();
+            var input = new Input();
+
+            var keyPress = new ConsoleKeyInfo();
+
+            var tempFileName = output.TempFileNameWithoutExt + "xml";
+
+            if (File.Exists(tempFileName))
+            {
+                Console.WriteLine("\nНаличен частичен файл с резултати. Искате ли да го използвате (Y/N)?");
+                keyPress = Console.ReadKey();
+                if(keyPress.Key == ConsoleKey.Y)
+                {
+                    var tempDealings = input.DeserialiseFromXml(tempFileName);
+                    dealings.AddRange(tempDealings);
+                    dealSequence = dealings.Count + 1;
+                    var lastDealingSide = (int)tempDealings.Last().DealingSide;
+                    dealingSide = (Sides)(((int)lastDealingSide + 1) % 4);
+                }
+            }
 
             Console.WriteLine("Карти за Бридж Белот");
             Console.WriteLine("====================");
@@ -96,8 +116,6 @@
                     continue;
                 }
 
-                var keyPress = new ConsoleKeyInfo();
-
                 do
                 {
                     // Note: No shuffled sequence numbers in the initial dealings set
@@ -109,7 +127,7 @@
 
                     var discardLast = dealSequence > 1 ? "D - Discard last, " : string.Empty;
 
-                    Console.Write($"\n\nEsc - Ignore, R - Rotate, {discardLast}any other key - Use ... ");
+                    Console.Write($"\n\nEsc - Ignore, R - Rotate, {discardLast}P - Pause and save to temp file, any other key - Use ... ");
 
                     keyPress = Console.ReadKey();
 
@@ -127,6 +145,11 @@
                             break;
                         case ConsoleKey.Escape:
                             break;
+                        case ConsoleKey.P:
+                            output.SerialiseToXml(dealings, true);
+                            Console.Write("\nPress any key to exit ... ");
+                            Console.ReadKey();
+                            return;
                         case ConsoleKey.R:
                             allCardsDealt = allCardsDealt.MoveFirstItemToEndOfList();
                             initial5CardDealt = initial5CardDealt.MoveFirstItemToEndOfList();
@@ -213,6 +236,11 @@
             if (saveToDatabaseParseSuccess && saveToDatabaseValue)
             {
                 DbPersistence.SaveAllDealings(dealings, sortOrders);
+            }
+
+            if (File.Exists(tempFileName))
+            {
+                File.Delete(tempFileName);
             }
 
             Console.Write("\nPress any key to exit ... ");

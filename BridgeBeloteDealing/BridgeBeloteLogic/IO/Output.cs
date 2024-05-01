@@ -13,13 +13,16 @@
     public class Output
     {
         private string fileNameWithoutExt;
+        private string tempFileNameWithoutExt;
+
+        public string TempFileNameWithoutExt { get => tempFileNameWithoutExt; set => tempFileNameWithoutExt = value; }
 
         // Note: When instantiated from the Excel AddIn we'll pass in false, as we can't get the Assembly info from Excel and we don't need the output functionality anyway
         public Output(bool initialiseFileName = true)
         {
             if(initialiseFileName)
             {
-                InitialiseFileName();
+                InitialiseFileNames();
             }
         }
 
@@ -42,13 +45,13 @@
             }
         }
 
-        public void SerialiseToXml(List<Dealing> dealings)
+        public void SerialiseToXml(List<Dealing> dealings, bool temp = false)
         {
             try
             {
-                var fullFileName = fileNameWithoutExt + "xml";
+                var fullFileName = (temp ? TempFileNameWithoutExt :  fileNameWithoutExt) + "xml";
 
-                var fs = new FileStream(fullFileName, FileMode.OpenOrCreate);
+                var fs = new FileStream(fullFileName, FileMode.Create);
 
                 var serialiser = new XmlSerializer(typeof(List<Dealing>));
 
@@ -116,9 +119,10 @@
             return sb.ToString();
         }
 
-        private void InitialiseFileName()
+        private void InitialiseFileNames()
         {
             const string dataFolderName = "BelotCardDealing";
+            const string tempFilename = "BelotCardDealing_Temp.";
 
             var executingAssemblyName = Assembly.GetExecutingAssembly().Location;
             var executingAssemblyPath = Path.GetDirectoryName(executingAssemblyName);
@@ -131,6 +135,7 @@
             var dateTimeStamp = now.ToString("dd MMM yyyy HH_mm");
             var fileName = $"{dataFolderName} {dateTimeStamp}.";
             fileNameWithoutExt = Path.Combine(fullDataFolder, fileName);
+            TempFileNameWithoutExt = Path.Combine(fullDataFolder, tempFilename);
         }
 
 
