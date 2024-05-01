@@ -92,7 +92,7 @@
 
                 if (maxSequenceLength > 0 && Rules.LongSequencesCheck(allCardsDealt, maxSequenceLength))
                 {
-                    // Discard deals containing sequences longer that specified
+                    // Discard deals containing sequences longer than specified
                     continue;
                 }
 
@@ -101,13 +101,13 @@
                 do
                 {
                     // Note: No shuffled sequence numbers in the initial dealings set
-                    var formattedOutput = output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealing.SequenceNo, default, dealingSide);
+                    var formattedOutput = output.FormattedOutput(initial5CardDealt, additional3CardDealt, dealSequence, default, dealingSide);
 
                     Console.WriteLine($"\n\nРаздаване #{dealSequence}\n");
 
                     formattedOutput.ForEach(p => Console.WriteLine(p));
 
-                    var discardLast = dealSequence > 1 ? ", D - Discard last, " : string.Empty;
+                    var discardLast = dealSequence > 1 ? "D - Discard last, " : string.Empty;
 
                     Console.Write($"\n\nEsc - Ignore, R - Rotate, {discardLast}any other key - Use ... ");
 
@@ -118,6 +118,12 @@
                         case ConsoleKey.D:
                             dealings.RemoveAt(dealings.Count - 1);
                             dealSequence--;
+                            var perviousDealingSide = (int)dealingSide - 1;
+                            if(perviousDealingSide < 0)
+                            {
+                                perviousDealingSide = 3;
+                            }
+                            dealingSide = (Sides)(perviousDealingSide % 4);
                             break;
                         case ConsoleKey.Escape:
                             break;
