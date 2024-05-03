@@ -37,7 +37,7 @@
                     output.ForEach(p => writer.WriteLine(p));
                 }
 
-                Console.WriteLine($"\n\nDealing data saved as \"{fullFileName}\"");
+                Console.WriteLine($"\n\nDealing display data saved as \"{fullFileName}\"");
             }
             catch (Exception e)
             {
@@ -51,13 +51,14 @@
             {
                 var fullFileName = (temp ? TempFileNameWithoutExt :  fileNameWithoutExt) + "xml";
 
-                var fs = new FileStream(fullFileName, FileMode.Create);
+                using (var fs = new FileStream(fullFileName, FileMode.Create))
+                {
+                    var serialiser = new XmlSerializer(typeof(List<Dealing>));
 
-                var serialiser = new XmlSerializer(typeof(List<Dealing>));
+                    serialiser.Serialize(fs, dealings);
+                }
 
-                serialiser.Serialize(fs, dealings);
-
-                Console.WriteLine($"\n\nDealing data saved as \"{fullFileName}\"");
+                Console.WriteLine($"\n\nDealing XML data saved as \"{fullFileName}\"");
             }
             catch (Exception e)
             {

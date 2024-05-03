@@ -70,24 +70,46 @@
 
             var keyPress = new ConsoleKeyInfo();
 
+            Console.WriteLine("Карти за Бридж Белот");
+            Console.WriteLine("====================");
+
             var tempFileName = output.TempFileNameWithoutExt + "xml";
 
             if (File.Exists(tempFileName))
             {
-                Console.WriteLine("\nНаличен частичен файл с резултати. Искате ли да го използвате (Y/N)?");
+                var existingFilePrompt = "\nНаличен файл с частични резултати. Искате ли да го използвате (Y/N)? ";
+
+                Console.Write(existingFilePrompt);
+                
                 keyPress = Console.ReadKey();
+
                 if(keyPress.Key == ConsoleKey.Y)
                 {
                     var tempDealings = input.DeserialiseFromXml(tempFileName);
+                    
+                    // Display loaded dealings on screen
+                    for(var i = 0; i < tempDealings.Count; i++)
+                    {
+                        var seq = i + 1;
+                        var tempDealing = tempDealings[i];
+                        var formattedOutput = output.FormattedOutput(tempDealing.Initial5CardsDealt, tempDealing.Additional3CardsDealt, seq, default, tempDealing.DealingSide);
+
+                        Console.WriteLine($"\n\nРаздаване #{seq}\n");
+
+                        formattedOutput.ForEach(p => Console.WriteLine(p));
+                    }
+
                     dealings.AddRange(tempDealings);
                     dealSequence = dealings.Count + 1;
                     var lastDealingSide = (int)tempDealings.Last().DealingSide;
                     dealingSide = (Sides)(((int)lastDealingSide + 1) % 4);
+
+                    if (File.Exists(tempFileName))
+                    {
+                        File.Delete(tempFileName);
+                    }
                 }
             }
-
-            Console.WriteLine("Карти за Бридж Белот");
-            Console.WriteLine("====================");
 
             while (dealSequence <= maxDealCountValue)
             {
@@ -236,11 +258,6 @@
             if (saveToDatabaseParseSuccess && saveToDatabaseValue)
             {
                 DbPersistence.SaveAllDealings(dealings, sortOrders);
-            }
-
-            if (File.Exists(tempFileName))
-            {
-                File.Delete(tempFileName);
             }
 
             Console.Write("\nPress any key to exit ... ");

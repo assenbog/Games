@@ -9,5 +9,5 @@ C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\EntityFramew
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\BridgeBeloteLogic.pdb
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\BridgeBeloteLogic.dll.config
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\bin\Release\EntityFramework.xml
-C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.csproj.CopyComplete
 C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBeloteDealing.csproj.AssemblyReference.cache
+C:\GitHub\Games\BridgeBeloteDealing\BridgeBeloteDealing\obj\Release\BridgeBe.2EAEE594.Up2Date

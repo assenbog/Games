@@ -11,11 +11,12 @@
         {
             try
             {
-                var fs = new FileStream(fileName, FileMode.Open);
+                using (var fs = new FileStream(fileName, FileMode.Open))
+                {
+                    var serialiser = new XmlSerializer(typeof(List<Dealing>));
 
-                var serialiser = new XmlSerializer(typeof(List<Dealing>));
-
-                return serialiser.Deserialize(fs) as List<Dealing>;
+                    return serialiser.Deserialize(fs) as List<Dealing>;
+                }
             }
             catch
             {
