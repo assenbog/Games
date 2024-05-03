@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("BridgeBeloteDealing")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCopyright("Assen Bogdanov & Simtcho Serafimov 2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

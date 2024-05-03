@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("BridgeBeloteLogic")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Bridge Belot dealings generation program")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("BridgeBeloteLogic")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCopyright("Copyright ©  2024, Assen Bogdanov & Simtcho Serafimov")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
