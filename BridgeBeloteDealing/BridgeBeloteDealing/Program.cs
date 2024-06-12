@@ -9,6 +9,7 @@
     using System.Configuration;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
 
     class Program
@@ -74,6 +75,10 @@
             Console.WriteLine("====================");
 
             var tempFileName = output.TempFileNameWithoutExt + "xml";
+
+            var starDealingsPresent = StarDealingsPresent();
+
+            var starDealings = GetStarDealings();
 
             if (File.Exists(tempFileName))
             {
@@ -283,6 +288,49 @@
             }
 
             return shuffledSequenceList;
+        }
+
+        private static bool StarDealingsPresent()
+        {
+            var starDealingsFolder = GetStarDealingsFolder();
+
+            return Directory.Exists(starDealingsFolder);
+        }
+
+        private static string GetCurrentFolder()
+        {
+            var codeBase = Path.GetDirectoryName(Assembly.GetExecutingAssembly().CodeBase);
+
+            var uri = new UriBuilder(codeBase);
+
+            return Uri.UnescapeDataString(uri.Path);
+        }
+
+        private static string GetStarDealingsFolder()
+        {
+            var currentFolder = GetCurrentFolder();
+
+            return Path.Combine(currentFolder, "StarDealings");
+        }
+
+        private static List<Dealing> GetStarDealings()
+        {
+            var starDealings = new List<Dealing>();
+            
+            var starDealingsFolder = GetStarDealingsFolder();
+
+            var files = Directory.GetFiles(starDealingsFolder, "*.xml");
+
+            var input = new Input();
+
+            foreach ( var file in files)
+            {
+                var dealings = input.DeserialiseFromXml(file);
+
+                starDealings.AddRange(dealings.Where(p => p.StarDealing));
+            }
+
+            return starDealings;
         }
     }
 }

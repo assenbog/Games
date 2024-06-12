@@ -37,7 +37,7 @@
 
         public Sides DealingSide { get; set; }
 
-        public bool IncludeInFutureDealings { get; set; }
+        public bool StarDealing { get; set; }
 
         public int SequenceNo { get; set; }
 
