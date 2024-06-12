@@ -76,10 +76,6 @@
 
             var tempFileName = output.TempFileNameWithoutExt + "xml";
 
-            var starDealingsPresent = StarDealingsPresent();
-
-            var starDealings = GetStarDealings();
-
             if (File.Exists(tempFileName))
             {
                 var existingFilePrompt = "\nНаличен файл с частични резултати. Искате ли да го използвате (Y/N)? ";
@@ -107,11 +103,31 @@
                     dealings.AddRange(tempDealings);
                     dealSequence = dealings.Count + 1;
                     var lastDealingSide = (int)tempDealings.Last().DealingSide;
-                    dealingSide = (Sides)(((int)lastDealingSide + 1) % 4);
+                    dealingSide = (Sides)((lastDealingSide + 1) % 4);
 
                     if (File.Exists(tempFileName))
                     {
                         File.Delete(tempFileName);
+                    }
+                }
+            }
+            else
+            {
+                if(StarDealingsPresent())
+                {
+                    var starDealings = GetStarDealings();
+                    if(starDealings.Count > 0)
+                    {
+                        Console.Write($"Разполагате с {starDealings.Count} съхранени раздавания маркирани със '*'.\nКолко от тях желаете да използвате в настоящото раздаване [0,{starDealings.Count}]? ");
+                        var starDealingsToUse = Convert.ToInt32(Console.ReadLine());
+                        if(starDealingsToUse > 0 && starDealingsToUse <= starDealings.Count)
+                        {
+                            var randomDealings = GetRandomDealings(starDealings, starDealingsToUse);
+                            dealings.AddRange(randomDealings);
+                            dealSequence = dealings.Count + 1;
+                            var lastDealingSide = (int)randomDealings.Last().DealingSide;
+                            dealingSide = (Sides)((lastDealingSide + 1) % 4);
+                        }
                     }
                 }
             }
@@ -331,6 +347,18 @@
             }
 
             return starDealings;
+        }
+
+        private static List<Dealing> GetRandomDealings(List<Dealing> dealings, int randomCount)
+        {
+            var randomDealings = dealings.OrderBy(p => Guid.NewGuid()).Take(randomCount).ToList();
+
+            for (var i = 0; i < randomCount; i++) 
+            {
+                randomDealings[i].DealingSide = (Sides)(i % 4);
+            }
+
+            return randomDealings;
         }
     }
 }
