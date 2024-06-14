@@ -3,48 +3,42 @@
     using BridgeBeloteLogic;
     using System;
     using System.Configuration;
+    using System.Diagnostics;
     using System.Text;
 
     class Program
     {
         static void Main()
         {
-            const int DefaultMaxDealCount = 16;
-            const int MaxSequenceLength = 0;
+            var allow4OfAKindValue = true;
+            var maxSequenceLengthValue = 0;
+            var maxDealCountValue = 16;
+            var saveToDatabaseValue = false;
 
-            var allow4OfAKindSetting = ConfigurationManager.AppSettings["Allow4OfAKind"];
-            var maxSequenceLengthSetting = ConfigurationManager.AppSettings["MaxSequenceLength"];
-            var maxDealCountSetting = ConfigurationManager.AppSettings["MaxDealCount"];
-            var saveToDatabaseSetting = ConfigurationManager.AppSettings["SaveToDatabase"];
-
-            var allow4OfAKindParamParseSuccess = bool.TryParse(allow4OfAKindSetting, out var allow4OfAKindValue);
-            var maxSequenceLengthParamParseSuccess = int.TryParse(maxSequenceLengthSetting, out var maxSequenceLengthValue);
-            var maxDealCountParamParseSuccess = int.TryParse(maxDealCountSetting, out var maxDealCountValue);
-            var saveToDatabaseParseSuccess = bool.TryParse(saveToDatabaseSetting, out var saveToDatabaseValue);
-
-            Console.OutputEncoding = Encoding.Unicode;
-
-            if (!allow4OfAKindParamParseSuccess)
+            try
             {
-                allow4OfAKindValue = false;
-            }
+                var allow4OfAKindSetting = ConfigurationManager.AppSettings["Allow4OfAKind"];
+                var maxSequenceLengthSetting = ConfigurationManager.AppSettings["MaxSequenceLength"];
+                var maxDealCountSetting = ConfigurationManager.AppSettings["MaxDealCount"];
+                var saveToDatabaseSetting = ConfigurationManager.AppSettings["SaveToDatabase"];
 
-            if (!maxSequenceLengthParamParseSuccess || maxSequenceLengthValue > 0 || maxSequenceLengthValue < 8)
-            {
-                maxSequenceLengthValue = MaxSequenceLength;
-            }
+                bool.TryParse(allow4OfAKindSetting, out allow4OfAKindValue);
+                int.TryParse(maxSequenceLengthSetting, out maxSequenceLengthValue);
+                int.TryParse(maxDealCountSetting, out maxDealCountValue);
+                bool.TryParse(saveToDatabaseSetting, out saveToDatabaseValue);
 
-            if (!maxDealCountParamParseSuccess)
-            {
-                maxDealCountValue = DefaultMaxDealCount;
-            }
+                Console.OutputEncoding = Encoding.Unicode;
 
-            if (!saveToDatabaseParseSuccess)
-            {
-                saveToDatabaseValue = false;
+                DealingProcessFlow.Go(allow4OfAKindValue, maxSequenceLengthValue, maxDealCountValue, saveToDatabaseValue);
             }
+            catch (Exception ex) 
+            { 
+                var exceptionDetails = ex.ToString();
 
-            DealingProcessFlow.Go(allow4OfAKindValue, maxSequenceLengthValue, maxDealCountValue, saveToDatabaseValue);
+                EventLog.WriteEntry("Application", exceptionDetails, EventLogEntryType.Error);
+
+                Console.Write($"\nThe following exception occured:\n {exceptionDetails}");
+            }
 
             Console.Write("\nPress any key to exit ... ");
 
