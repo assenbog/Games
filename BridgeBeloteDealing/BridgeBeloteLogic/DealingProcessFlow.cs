@@ -147,6 +147,7 @@
                                 perviousDealingSide = 3;
                             }
                             dealingSide = (Sides)(perviousDealingSide % 4);
+                            dealing.DealingSide = dealingSide;
                             break;
                         case ConsoleKey.Escape:
                             break;
